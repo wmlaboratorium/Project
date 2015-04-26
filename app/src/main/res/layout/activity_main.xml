@@ -3,6 +3,38 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#91FF47" tools:context=".MainActivity">
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button"
+        android:background="@null"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/button_startgame"
+        android:layout_marginTop="100dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_score"
+        android:background="@null"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/button_score"
+        android:layout_below="@+id/button_startgame"
+        android:layout_marginTop="20dp"/>
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_options"
+        android:background="@null"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/button_options"
+        android:layout_below="@+id/button_score"
+        android:layout_marginTop="20dp"/>
 
 </RelativeLayout>
