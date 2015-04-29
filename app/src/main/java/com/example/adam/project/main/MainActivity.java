@@ -1,4 +1,4 @@
-package com.example.adam.project;
+package com.example.adam.project.main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,9 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.adam.project.R;
+import com.example.adam.project.best_score.BestScoreActivity;
+import com.example.adam.project.new_game.GameActivity;
+
 public class MainActivity extends Activity {
 
-    private ImageButton bestScoreButton;
+    private ImageButton bestScoreButton,
+                        startGameButton,
+                        optionsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +27,16 @@ public class MainActivity extends Activity {
 
 
     private void initialize() {
+        startGameButton = (ImageButton)findViewById(R.id.button_startgame);
+        startGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         bestScoreButton = (ImageButton)findViewById(R.id.button_score);
         bestScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +47,11 @@ public class MainActivity extends Activity {
         });
 
 
+        optionsButton = (ImageButton)findViewById(R.id.button_options);
+        optionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {}
+        });
     }
 
     @Override

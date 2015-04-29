@@ -1,4 +1,4 @@
-package com.example.adam.project;
+package com.example.adam.project.best_score;
 
 /**
  * Created by Adam on 4/27/2015.

@@ -1,24 +1,17 @@
-package com.example.adam.project;
+package com.example.adam.project.new_game;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.adam.project.R;
 
-public class BestScoreActivity extends ActionBarActivity {
+public class GameActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_best_score);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_best_score, menu);
-        return true;
+        setContentView(new GamePanel(this));
     }
 
     @Override
