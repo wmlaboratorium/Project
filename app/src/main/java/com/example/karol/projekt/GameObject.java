@@ -2,16 +2,25 @@ package com.example.karol.projekt;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /**
  * Created by karol on 30.04.15.
  */
-public abstract class GameObject {
+public abstract class GameObject implements Serializable {
     //to taka zmienna w razie potrzeby przetrzymywania czegos dodatkowego :P
     private Object otherSource = null;
+    //pozycja obiektu
     private Vector2 position = null;
+    //predkosc obiektu
     private Vector2 speed = null;
+    //texturka obiektu
     private Bitmap texture = null;
 
+
+    /**
+     * ***************KONSTRUKTORY**********************
+     */
     protected GameObject() {
         this.setPosition(new Vector2());
         this.setSpeed(new Vector2());
@@ -38,6 +47,10 @@ public abstract class GameObject {
         this.setPosition(position);
         this.setSpeed(speed);
     }
+
+    /**
+     * ***************KONIEC KONSTRUKTOROW**********************
+     */
 
     public Object getOtherSource() {
         return otherSource;
@@ -71,9 +84,12 @@ public abstract class GameObject {
         this.texture = texture;
     }
 
+    //to funkcja ktora bedzie updateowac stan obiektu (czyt. przesuniecia itp)
     public abstract void update();
 
+    //na wszelki wypadek wrzucilem, bo sam jeszcze nie wiem czy sie przyda, bynajmniej tutaj beda algorytmy przesuwania ?
     public abstract void move();
 
+    //no jezeli sobie na obiekt klikniemy to zostanie to wywolane (zakladam ze w wiekszosci obiektow bedzie puste :P)
     public abstract void onClick();
 }
