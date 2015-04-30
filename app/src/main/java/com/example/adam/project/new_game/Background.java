@@ -18,6 +18,7 @@ public class Background {
         x += dx;
         if (x < -GamePanel.WIDTH) {
             x = 0;
+            
         }
     }
 
