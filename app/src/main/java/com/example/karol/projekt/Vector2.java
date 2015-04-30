@@ -16,7 +16,7 @@ public final class Vector2 {
     }
 
     public int compareTo(Vector2 v) {
-        if (v.getX() == this.y && v.getY() == v.getY())
+        if (v.getX() == this.x && v.getY() == this.y)
             return 0;
         else {
             int dist = (int) (this.getDistanceTo(v));
