@@ -11,4 +11,12 @@ public class BestScoreItem {
         this.name = name;
         this.result = result;
     }
+
+    public int getResult() {
+        return result;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

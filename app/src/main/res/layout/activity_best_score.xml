@@ -10,7 +10,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/bestScoreListView"
+        android:id="@+id/best_score_ListView"
         android:layout_alignParentTop="true"
         android:layout_marginTop="96dp"
         android:layout_marginLeft="30dp"
