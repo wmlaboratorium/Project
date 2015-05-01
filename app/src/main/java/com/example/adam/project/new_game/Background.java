@@ -8,13 +8,13 @@ import android.graphics.Canvas;
  */
 public class Background {
     private Bitmap bitmap;
-    private int x, y, dx;
+    private int x, y;
 
     public Background(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
 
-    public void update() {
+    public void update(int dx) {
         x += dx;
         if (x < -GamePanel.WIDTH) {
             x = 0;
@@ -29,9 +29,9 @@ public class Background {
         }
     }
 
-    public void setVector(int dx) {
+    /*public void setVector(int dx) {
         this.dx = dx;
-    }
+    }*/
 
 
 }

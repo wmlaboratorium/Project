@@ -1,6 +1,7 @@
-package com.example.karol.projekt;
+package com.example.karol.project;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 /**
  * Created by karol on 30.04.15.
@@ -24,6 +25,11 @@ public class EnemyObject extends GameObject {
     }
 
     @Override
+    public void update(int x, int y) {
+
+    }
+
+    @Override
     public void update() {
         //TODO wypelnic kodem updatujacym
     }
@@ -36,5 +42,10 @@ public class EnemyObject extends GameObject {
     @Override
     public void onClick() {
         //TODO moze cos sie wymysli tutaj :P
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+
     }
 }

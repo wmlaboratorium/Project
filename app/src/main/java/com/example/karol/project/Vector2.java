@@ -1,4 +1,4 @@
-package com.example.karol.projekt;
+package com.example.karol.project;
 
 /**
  * Created by karol on 30.04.15.

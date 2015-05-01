@@ -1,6 +1,9 @@
-package com.example.karol.projekt;
+package com.example.karol.project;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+
+import com.example.adam.project.new_game.GamePanel;
 
 /**
  * Created by karol on 30.04.15.
@@ -20,8 +23,17 @@ public class PlayerObject extends GameObject {
     }
 
     @Override
+    public void update(int x, int y) {
+        if (GamePanel.WIDTH / 2 > x)
+            this.position.setX(this.position.getX() - this.speed.getX());
+        else if (GamePanel.WIDTH / 2 <= x)
+            this.position.setX(this.position.getX() + this.speed.getX());
+        System.err.println("Player position: X = " + this.position.getX() + " Y = " + this.position.getY());
+    }
+
+    @Override
     public void update() {
-        //TODO wypelnic kodem updatujacym
+
     }
 
     @Override
@@ -32,5 +44,10 @@ public class PlayerObject extends GameObject {
     @Override
     public void onClick() {
         //TODO moze sie zrobi jakas super moc czy cos po kliknieciu na gracza :D np GOD_MODE
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawBitmap(this.texture, GamePanel.WIDTH / 2, GamePanel.HEIGHT - 60, null);
     }
 }

@@ -1,6 +1,7 @@
-package com.example.karol.projekt;
+package com.example.karol.project;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 import java.io.Serializable;
 
@@ -9,13 +10,13 @@ import java.io.Serializable;
  */
 public abstract class GameObject implements Serializable {
     //to taka zmienna w razie potrzeby przetrzymywania czegos dodatkowego :P
-    private Object otherSource = null;
+    protected Object otherSource = null;
     //pozycja obiektu
-    private Vector2 position = null;
+    protected Vector2 position = null;
     //predkosc obiektu
-    private Vector2 speed = null;
+    protected Vector2 speed = null;
     //texturka obiektu
-    private Bitmap texture = null;
+    protected Bitmap texture = null;
 
 
     /**
@@ -85,6 +86,8 @@ public abstract class GameObject implements Serializable {
     }
 
     //to funkcja ktora bedzie updateowac stan obiektu (czyt. przesuniecia itp)
+    public abstract void update(int x, int y);
+
     public abstract void update();
 
     //na wszelki wypadek wrzucilem, bo sam jeszcze nie wiem czy sie przyda, bynajmniej tutaj beda algorytmy przesuwania ?
@@ -92,4 +95,8 @@ public abstract class GameObject implements Serializable {
 
     //no jezeli sobie na obiekt klikniemy to zostanie to wywolane (zakladam ze w wiekszosci obiektow bedzie puste :P)
     public abstract void onClick();
+
+    //rysujemy na ekranie nasz obiekt
+    public abstract void draw(Canvas canvas);
+
 }
