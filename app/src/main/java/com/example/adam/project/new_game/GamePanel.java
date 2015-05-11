@@ -23,13 +23,11 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int PLAYER_SPEED_X = 10;
     public static final int PLAYER_SPEED_Y = 5;
-    public static int WIDTH;
-    public static int HEIGHT;
+    public static int WIDTH = 856;
+    public static int HEIGHT = 480;
     private GameThread gameThread;
     private Background background;
-
     private ArrayBlockingQueue<Integer> inputX;
-
     private ArrayList<GameObject> gameObjects;
     private PlayerObject playerObject;
 
@@ -43,9 +41,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         display.getSize(size);
         this.WIDTH = size.x;
         this.HEIGHT = size.y;
-
         this.inputX = new ArrayBlockingQueue<Integer>(20);
-
         this.initGameObjects();
 
         getHolder().addCallback(this);
@@ -56,9 +52,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void initGameObjects() {
         this.gameObjects = new ArrayList<>();
-
         this.playerObject = new PlayerObject(0, 0, GamePanel.PLAYER_SPEED_X, GamePanel.PLAYER_SPEED_Y, BitmapFactory.decodeResource(getResources(), R.drawable.player_object));
-
         this.gameObjects.add(playerObject);
     }
 
@@ -66,6 +60,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         for (GameObject o : this.gameObjects)
             if (!(o instanceof PlayerObject))
                 o.update();
+
+
+        background.update();
 
     }
 
@@ -101,8 +98,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
-        //background.setVector(-5);
+        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background2));
+        background.setVector(-5);
 
         gameThread.setRunning(true);
         gameThread.start();
