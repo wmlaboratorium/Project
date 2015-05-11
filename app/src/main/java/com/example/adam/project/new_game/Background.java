@@ -35,7 +35,4 @@ public class Background {
         }
     }
 
-    public void setVector(int dx) {
-        this.dx = dx;
-    }
 }

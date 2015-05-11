@@ -25,14 +25,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int PLAYER_SPEED_Y = 5;
     public static int WIDTH = 856;
     public static int HEIGHT = 480;
+    public static int MOVE_SPEED = -5;
     private GameThread gameThread;
     private Background background;
     private ArrayBlockingQueue<Integer> inputX;
     private ArrayList<GameObject> gameObjects;
     private PlayerObject playerObject;
+    private Player player;
 
     public GamePanel(Context context) {
         super(context);
+
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -41,12 +44,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         display.getSize(size);
         this.WIDTH = size.x;
         this.HEIGHT = size.y;
-        this.inputX = new ArrayBlockingQueue<Integer>(20);
-        this.initGameObjects();
+
+        //this.inputX = new ArrayBlockingQueue<Integer>(20);
+        //this.initGameObjects();
 
         getHolder().addCallback(this);
         gameThread = new GameThread(getHolder(), this);
-
         setFocusable(true);
     }
 
@@ -57,25 +60,32 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
+        /*
         for (GameObject o : this.gameObjects)
             if (!(o instanceof PlayerObject))
                 o.update();
 
-
-        background.update();
+        */
+        if (player.getPlaying()) {
+            background.update(MOVE_SPEED);
+            player.update();
+        }
 
     }
 
     @Override
     public void draw(Canvas canvas) {
-        final float scaleFactorX = getWidth()/WIDTH;
-        final float scaleFactorY = getHeight()/HEIGHT;
+        final float scaleFactorX = getWidth()/(WIDTH*1.f);
+        final float scaleFactorY = getHeight()/(HEIGHT*1.f);
         if (canvas != null) {
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
             background.draw(canvas);
+            player.draw(canvas);
+            /*
             for (GameObject o : this.gameObjects)
                 o.draw(canvas);
+            */
             canvas.restoreToCount(savedState);
         }
     }
@@ -99,7 +109,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background2));
-        background.setVector(-5);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player_object), 30, 30, 30);
 
         gameThread.setRunning(true);
         gameThread.start();
@@ -107,6 +117,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        /*
         System.err.println("Lapie event " + e);
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -122,6 +133,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
                 break;
         }
+        */
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            if (!player.getPlaying()) {
+                player.setPlaying(true);
+            }
+            else {
+                player.setUp(true);
+            }
+            return true;
+        }
+        else if (e.getAction() == MotionEvent.ACTION_UP) {
+            player.setUp(false);
+            return true;
+        }
+
         return super.onTouchEvent(e);
     }
 }

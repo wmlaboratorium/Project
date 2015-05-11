@@ -50,8 +50,8 @@ public class GameThread extends Thread {
             long usedTime = System.currentTimeMillis() - startTime;
             try {
                 Thread.sleep(targetTime - usedTime);
-                if (frameCount%20 == 0)
-                    System.out.println("We can have "+1000/usedTime+" FPS");
+                if (frameCount%20 == 0) {}
+                   // System.out.println("We can have "+1000/usedTime+" FPS");
             }
             catch (Exception e) {}
             frameCount++;
