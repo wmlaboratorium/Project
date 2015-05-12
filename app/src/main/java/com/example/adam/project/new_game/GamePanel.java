@@ -4,17 +4,17 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-
 import com.example.adam.project.R;
-import com.example.karol.project.GameObject;
+//import com.example.karol.project.GameObject;
 import com.example.karol.project.PlayerObject;
-
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -32,11 +32,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private ArrayList<GameObject> gameObjects;
     private PlayerObject playerObject;
     private Player player;
+    private ArrayList<Enemy> enemies;
+    private long enemyStartTime,
+                 enemySpaceTime,
+                 enemyActualTime;
+    private Random random = new Random();
 
     public GamePanel(Context context) {
         super(context);
-
-
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
@@ -53,12 +56,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
     }
 
+/*
     public void initGameObjects() {
         this.gameObjects = new ArrayList<>();
         this.playerObject = new PlayerObject(0, 0, GamePanel.PLAYER_SPEED_X, GamePanel.PLAYER_SPEED_Y, BitmapFactory.decodeResource(getResources(), R.drawable.player_object));
         this.gameObjects.add(playerObject);
     }
 
+*/
     public void update() {
         /*
         for (GameObject o : this.gameObjects)
@@ -69,9 +74,46 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (player.getPlaying()) {
             background.update(MOVE_SPEED);
             player.update();
+
+            //Add enemy objects on timer
+            if (enemies.size() == 0) {
+                enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), 20, 20, 2));
+                enemySpaceTime = random.nextInt(2000) + 100;
+                enemyActualTime = System.currentTimeMillis();
+            }
+            else {
+                if (System.currentTimeMillis() - enemyActualTime > enemySpaceTime) {
+                    enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), 20, 20, 2));
+                    enemySpaceTime = random.nextInt(2000) + 100;
+                    enemyActualTime = System.currentTimeMillis();
+                }
+            }
         }
 
+        for (Enemy enemy : enemies) {
+            enemy.update();
+
+            if (collision(enemy, player)) {
+                enemies.remove(enemy);
+                player.setPlaying(false);
+                break;
+            }
+            //Deleting enemies from array list when they leave from screen
+            if (enemy.getX() == -100) {
+                enemies.remove(enemy);
+            }
+
+        }
     }
+
+
+    public Boolean collision(GameObject o1, GameObject o2) {
+        if (Rect.intersects(o1.getRect(), o2.getRect())) {
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void draw(Canvas canvas) {
@@ -82,6 +124,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.scale(scaleFactorX, scaleFactorY);
             background.draw(canvas);
             player.draw(canvas);
+
+            for (Enemy enemy : enemies) {
+                enemy.draw(canvas);
+            }
+
+
             /*
             for (GameObject o : this.gameObjects)
                 o.draw(canvas);
@@ -90,30 +138,38 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         Boolean retry = true;
-        while (retry) {
+        int counter = 0;
+        while (retry && counter < 1000) {
+            counter++;
             try {
                 gameThread.setRunning(false);
                 gameThread.join();
+                retry = false;
             }
             catch (Exception e) {}
-            retry = false;
         }
     }
+
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background2));
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player_object), 30, 30, 30);
+        enemies = new ArrayList<Enemy>();
+        enemyStartTime = System.currentTimeMillis();
 
         gameThread.setRunning(true);
         gameThread.start();
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {

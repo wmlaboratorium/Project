@@ -11,7 +11,6 @@ public class Player extends GameObject {
     private int score,
                 startY = (int)(GamePanel.HEIGHT*0.8),
                 jumpHeight = 200;
-    private double dya;
     private Boolean up,
                     playing = false,
                     jumping = false;
@@ -60,8 +59,6 @@ public class Player extends GameObject {
     public Boolean getPlaying() { return playing; }
 
     public void setPlaying(Boolean b) { playing = b;  }
-
-    public void resetDya() { dya = 0; }
 
     public void resetScore() { score = 0; }
 
