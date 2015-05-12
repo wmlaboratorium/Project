@@ -20,7 +20,7 @@ public class Enemy extends GameObject {
         width = w;
         height = h;
 
-        speed = 7 + random.nextInt(30);
+        speed = 15 + random.nextInt(15);
     }
 
     public void update() {

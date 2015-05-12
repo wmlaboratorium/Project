@@ -21,13 +21,11 @@ public class Animation {
         this.delay = delay;
     }
 
+
     public void setFrames(Bitmap frames[]) {
         this.frames = frames;
     }
 
-    public void setDelay(long l) { delay = l; }
-
-    public void setFrame(int i) { currentFrame = i; }
 
     public void update(){
         long elapsed = (System.currentTimeMillis() - startTime);
@@ -42,10 +40,15 @@ public class Animation {
         }
     }
 
+
     public Bitmap getImage() { return frames[currentFrame];  }
 
     public int getCurrentFrame() { return currentFrame; }
 
     public Boolean getPlayedOnce() { return playedOnce; }
+
+    public void setDelay(long l) { delay = l; }
+
+    public void setFrame(int i) { currentFrame = i; }
 
 }

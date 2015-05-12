@@ -7,7 +7,6 @@ import android.graphics.Canvas;
  * Created by Adam on 5/11/2015.
  */
 public class Player extends GameObject {
-    private Bitmap[] frames;
     private int score,
                 startY = (int)(GamePanel.HEIGHT*0.8),
                 jumpHeight = 200;
@@ -18,7 +17,6 @@ public class Player extends GameObject {
     private Animation animation;
 
     public Player(Bitmap frames[], int w, int h, int numFrames) {
-        this.frames = frames;
         x = GamePanel.WIDTH/2;
         y = startY;
         dy = 0;
