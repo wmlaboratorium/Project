@@ -1,6 +1,7 @@
 package com.example.adam.project.new_game;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -162,7 +163,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background2));
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player_object), 30, 30, 30);
+        Bitmap playerFrames[] = new Bitmap[5];
+
+        playerFrames[0] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_1_frame);
+        playerFrames[1] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_2_frame);
+        playerFrames[2] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_3_frame);
+        playerFrames[3] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_4_frame);
+        playerFrames[4] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_5_frame);
+
+        player = new Player(playerFrames, 60, 100, 5);
         enemies = new ArrayList<Enemy>();
         enemyStartTime = System.currentTimeMillis();
 
