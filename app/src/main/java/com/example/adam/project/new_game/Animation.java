@@ -27,7 +27,7 @@ public class Animation {
     }
 
 
-    public void update(){
+    public void update() {
         long elapsed = (System.currentTimeMillis() - startTime);
 
         if (elapsed > delay) {

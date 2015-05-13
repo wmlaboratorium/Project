@@ -2,6 +2,7 @@ package com.example.adam.project.new_game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 /**
  * Created by Adam on 5/11/2015.
@@ -9,12 +10,14 @@ import android.graphics.Canvas;
 public class Player extends GameObject {
     private int score,
                 startY = (int)(GamePanel.HEIGHT*0.8),
-                jumpHeight = 200;
+                jumpHeight = Config.getInstance().getJumpHeight(),
+                lives = Config.getInstance().getPlayerLives();
     private Boolean up,
                     playing = false,
                     jumping = false;
     private long startTime;
     private Animation animation;
+    private Paint paint = new Paint();
 
     public Player(Bitmap frames[], int w, int h, int numFrames) {
         x = GamePanel.WIDTH/2;
@@ -24,6 +27,7 @@ public class Player extends GameObject {
         height = h;
         width = w;
         animation = new Animation(numFrames, frames, 100);
+        paint.setTextSize(GamePanel.HEIGHT / 15);
     }
 
     public void setUp(Boolean b) { up = b; }
@@ -53,9 +57,17 @@ public class Player extends GameObject {
 
     public void draw(Canvas canvas) {
         canvas.drawBitmap(animation.getImage(), x - 100, y - 60, null);
+        canvas.drawText("Score: "+score, 40, GamePanel.HEIGHT / 8, paint);
+        canvas.drawText("Lives: "+lives, 40, GamePanel.HEIGHT / 5, paint);
     }
 
+    public void addToScore(int additional) { score += additional; }
+
     public int getScore() { return score; }
+
+    public void loseLive() { lives -= 1; }
+
+    public int getLives() { return lives; }
 
     public Boolean getPlaying() { return playing; }
 

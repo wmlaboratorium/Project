@@ -63,14 +63,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.playerObject = new PlayerObject(0, 0, GamePanel.PLAYER_SPEED_X, GamePanel.PLAYER_SPEED_Y, BitmapFactory.decodeResource(getResources(), R.drawable.player_object));
         this.gameObjects.add(playerObject);
     }
-
 */
     public void update() {
         /*
         for (GameObject o : this.gameObjects)
             if (!(o instanceof PlayerObject))
                 o.update();
-
         */
         if (player.getPlaying()) {
             background.update(MOVE_SPEED);
@@ -78,13 +76,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             //Add enemy objects on timer
             if (enemies.size() == 0) {
-                enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), 20, 20, 2));
+                enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), Config.getInstance().getEnemyWidth(), Config.getInstance().getEnemyHeight(), 2));
                 enemySpaceTime = random.nextInt(2000) + 100;
                 enemyActualTime = System.currentTimeMillis();
             }
             else {
                 if (System.currentTimeMillis() - enemyActualTime > enemySpaceTime) {
-                    enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), 20, 20, 2));
+                    enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), Config.getInstance().getEnemyWidth(), Config.getInstance().getEnemyHeight(), 2));
                     enemySpaceTime = random.nextInt(2000) + 100;
                     enemyActualTime = System.currentTimeMillis();
                 }
@@ -92,19 +90,34 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         for (Enemy enemy : enemies) {
-            enemy.update();
 
-            if (collision(enemy, player)) {
-                enemies.remove(enemy);
-                player.setPlaying(false);
-                break;
-            }
-            //Deleting enemies from array list when they leave from screen
-            if (enemy.getX() == -100) {
-                enemies.remove(enemy);
-            }
+            //Nie usuwam obiektow z listy jak wyjda poza ekran bo scina gre przy tym (nie wiem czemu)
+            if (enemy.getX() > -100) {
+                enemy.update();
 
+                if (collision(enemy, player)) {
+                    enemies.remove(enemy);
+                    player.setPlaying(false);
+                    if (player.getLives() > 1)
+                        player.loseLive();
+                    else
+                        gameOver();
+                    break;
+                }
+                //Means that player jumped after enemy
+                else if (enemy.getX() < (WIDTH / 2 - 50) && !enemy.getJumped()) {
+
+                    enemy.setJumped();
+                    player.addToScore(enemy.getScoreValue());
+                    System.out.println("Jumped "+ enemies.size()+" Player "+player.getScore());
+                }
+            }
         }
+    }
+
+
+    public void gameOver() {
+        //not inmplemented
     }
 
 
@@ -130,7 +143,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 enemy.draw(canvas);
             }
 
-
             /*
             for (GameObject o : this.gameObjects)
                 o.draw(canvas);
@@ -142,7 +154,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
-
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -212,7 +223,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             player.setUp(false);
             return true;
         }
-
         return super.onTouchEvent(e);
     }
 }
