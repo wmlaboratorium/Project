@@ -2,6 +2,7 @@ package com.example.karol.project;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import java.io.Serializable;
 
@@ -17,6 +18,13 @@ public abstract class GameObject implements Serializable {
     protected Vector2 speed = null;
     //texturka obiektu
     protected Bitmap texture = null;
+
+    protected int x,
+            y,
+            dx,
+            dy,
+            width,
+            height;
 
 
     /**
@@ -98,5 +106,19 @@ public abstract class GameObject implements Serializable {
 
     //rysujemy na ekranie nasz obiekt
     public abstract void draw(Canvas canvas);
+
+    public void setX(int x) {  this.x = x; }
+
+    public void setY(int y) {  this.y = y; }
+
+    public int getX() { return x; }
+
+    public int getY() {  return y; }
+
+    public int getWidth() { return width; }
+
+    public int getHeight() {  return height;  }
+
+    public Rect getRect() { return new Rect(x, y, x + width, y + height); }
 
 }

@@ -13,6 +13,8 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import com.example.adam.project.R;
 //import com.example.karol.project.GameObject;
+import com.example.karol.project.EnemyObject;
+import com.example.karol.project.GameObject;
 import com.example.karol.project.PlayerObject;
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,9 +33,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Background background;
     private ArrayBlockingQueue<Integer> inputX;
     private ArrayList<GameObject> gameObjects;
-    private PlayerObject playerObject;
-    private Player player;
-    private ArrayList<Enemy> enemies;
+    private PlayerObject player;
+    private ArrayList<EnemyObject> enemies;
     private long enemyStartTime,
                  enemySpaceTime,
                  enemyActualTime;
@@ -76,20 +77,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             //Add enemy objects on timer
             if (enemies.size() == 0) {
-                enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), Config.getInstance().getEnemyWidth(), Config.getInstance().getEnemyHeight(), 2));
+                enemies.add(new EnemyObject(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), Config.getInstance().getEnemyWidth(), Config.getInstance().getEnemyHeight(), 2));
                 enemySpaceTime = random.nextInt(2000) + 100;
                 enemyActualTime = System.currentTimeMillis();
             }
             else {
                 if (System.currentTimeMillis() - enemyActualTime > enemySpaceTime) {
-                    enemies.add(new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), Config.getInstance().getEnemyWidth(), Config.getInstance().getEnemyHeight(), 2));
+                    enemies.add(new EnemyObject(BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object), WIDTH + 10, (int)(HEIGHT*0.8), Config.getInstance().getEnemyWidth(), Config.getInstance().getEnemyHeight(), 2));
                     enemySpaceTime = random.nextInt(2000) + 100;
                     enemyActualTime = System.currentTimeMillis();
                 }
             }
         }
 
-        for (Enemy enemy : enemies) {
+        for (EnemyObject enemy : enemies) {
 
             //Nie usuwam obiektow z listy jak wyjda poza ekran bo scina gre przy tym (nie wiem czemu)
             if (enemy.getX() > -100) {
@@ -139,7 +140,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             background.draw(canvas);
             player.draw(canvas);
 
-            for (Enemy enemy : enemies) {
+            for (EnemyObject enemy : enemies) {
                 enemy.draw(canvas);
             }
 
@@ -182,8 +183,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         playerFrames[3] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_4_frame);
         playerFrames[4] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_5_frame);
 
-        player = new Player(playerFrames, 60, 100, 5);
-        enemies = new ArrayList<Enemy>();
+        player = new PlayerObject(playerFrames, 60, 100, 5);
+        enemies = new ArrayList<EnemyObject>();
         enemyStartTime = System.currentTimeMillis();
 
         gameThread.setRunning(true);
