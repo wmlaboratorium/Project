@@ -50,6 +50,7 @@ public class PlayerObject extends GameObject {
                 dy = -20;
                 jumping = true;
             }
+            up = false;
         }
         else {
             if (jumping) {

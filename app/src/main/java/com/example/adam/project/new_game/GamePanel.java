@@ -12,7 +12,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import com.example.adam.project.R;
-//import com.example.karol.project.GameObject;
 import com.example.karol.project.EnemyObject;
 import com.example.karol.project.GameObject;
 import com.example.karol.project.PlayerObject;
@@ -110,7 +109,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
                     enemy.setJumped();
                     player.addToScore(enemy.getScoreValue());
-                    System.out.println("Jumped "+ enemies.size()+" Player "+player.getScore());
+                    //System.out.println("Jumped "+ enemies.size()+" Player "+player.getScore());
                 }
             }
         }
