@@ -19,8 +19,9 @@ public class BonusObject extends GameObject {
         this.bitmap = bitmap;
         super.x = x;
         super.y = y;
-        width = w;
-        height = h;
+        width = bitmap.getWidth();
+        height = bitmap.getHeight();
+
 
         speed = 10 + random.nextInt(10);
     }

@@ -20,8 +20,8 @@ public class EnemyObject extends GameObject {
         this.bitmap = bitmap;
         super.x = x;
         super.y = y;
-        width = w;
-        height = h;
+        width = bitmap.getWidth();
+        height = bitmap.getHeight();
 
         speed = 15 + random.nextInt(15);
     }
