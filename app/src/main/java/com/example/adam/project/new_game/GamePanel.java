@@ -15,10 +15,11 @@ import android.view.WindowManager;
 
 import com.example.adam.project.R;
 import com.example.karol.project.BonusObject;
+import com.example.adam.project.best_score.Standings;
 import com.example.karol.project.EnemyObject;
 import com.example.karol.project.GameObject;
 import com.example.karol.project.PlayerObject;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -55,21 +56,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.WIDTH = size.x;
         this.HEIGHT = size.y;
 
-        //this.inputX = new ArrayBlockingQueue<Integer>(20);
-        //this.initGameObjects();
-
         getHolder().addCallback(this);
         gameThread = new GameThread(getHolder(), this);
         setFocusable(true);
     }
 
-    /*
-        public void initGameObjects() {
-            this.gameObjects = new ArrayList<>();
-            this.playerObject = new PlayerObject(0, 0, GamePanel.PLAYER_SPEED_X, GamePanel.PLAYER_SPEED_Y, BitmapFactory.decodeResource(getResources(), R.drawable.player_object));
-            this.gameObjects.add(playerObject);
-        }
-    */
     public void update() {
         if (player.getPlaying()) {
             background.update(MOVE_SPEED);
@@ -154,7 +145,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void gameOver() {
         player.setPlaying(false);
-        //TODO tutaj bym dodal zapisywanie punktow :)
+
+        if (Standings.getInstance(context).isGoodResult(player.getScore())) {
+            System.out.println("Good Result");
+        }
+
+
     }
 
 
@@ -233,23 +229,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        /*
-        System.err.println("Lapie event " + e);
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                int x = (int) e.getX();
-                int y = (int) e.getY();
-                if (x < this.WIDTH / 2)
-                    background.update(this.playerObject.getSpeed().getX());
-                else
-                    background.update(-this.playerObject.getSpeed().getX());
-                this.playerObject.update(x, y);
-                break;
-            default:
-
-                break;
-        }
-        */
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             if (!player.getPlaying()) {
                 player.setPlaying(true);
