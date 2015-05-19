@@ -92,9 +92,11 @@ public class PlayerObject extends GameObject {
 
     public int getLives() { return lives; }
 
+    public void addLives(int lives) { this.lives += lives; }
+
     public Boolean getPlaying() { return playing; }
 
     public void setPlaying(Boolean b) { playing = b; }
 
-    public void resetScore() { score = 0; }
+    public void reset() { score = 0; lives = 3; }
 }

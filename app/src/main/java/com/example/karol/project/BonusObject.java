@@ -6,24 +6,23 @@ import android.graphics.Canvas;
 import java.util.Random;
 
 /**
- * Created by karol on 30.04.15.
+ * Created by kplos on 19.05.2015.
  */
-public class EnemyObject extends GameObject {
-
+public class BonusObject extends GameObject {
     private int speed,
             scoreValue = 2;
     private Random random = new Random();
     private Bitmap bitmap;
     private Boolean jumped = false;
 
-    public EnemyObject(Bitmap bitmap, int x, int y, int w, int h, int numFrames) {
+    public BonusObject(Bitmap bitmap, int x, int y, int w, int h, int numFrames) {
         this.bitmap = bitmap;
         super.x = x;
         super.y = y;
         width = w;
         height = h;
 
-        speed = 15 + random.nextInt(15);
+        speed = 10 + random.nextInt(10);
     }
 
     @Override
