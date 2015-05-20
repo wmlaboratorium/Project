@@ -21,11 +21,9 @@ public class Standings {
 
     //Function check that our result is in top 10 results of all time
     public Boolean isGoodResult(int score) {
-
         String input = readFromFile();
         if (!input.equals("")) {
             String results[] = input.split(" ");
-            System.out.println(input+": "+results.length);
             ranking = new BestScoreItem[results.length + 1];
 
             for (int i = 0; i < results.length; i++) {
@@ -42,13 +40,35 @@ public class Standings {
             }
         }
         else {
-            System.out.println(input+": new");
             ranking = new BestScoreItem[1];
             ranking[0] = new BestScoreItem("NewScore", score);
             return true;
         }
-
         return false;
+    }
+
+
+    public BestScoreItem[] getRankingTable() {
+        String input = readFromFile();
+        if (!input.equals("")) {
+            String results[] = input.split(" ");
+            ranking = new BestScoreItem[results.length];
+
+            int length;
+            if (results.length > 10)
+                length = 10;
+            else
+                length = results.length;
+
+            for (int i = 0; i < length; i++) {
+                String data[] = results[i].split(",");
+                ranking[i] = new BestScoreItem(data[0], Integer.parseInt(data[1]));
+            }
+            ranking = QuickSort.Sort(ranking, 0, ranking.length - 1);
+            return ranking;
+        }
+        else
+            return null;
     }
 
 
@@ -64,7 +84,6 @@ public class Standings {
         catch (Exception e) {}
 
         String contents = new String(bytes);
-        System.out.println("read: "+contents);
         return contents;
     }
 
@@ -82,7 +101,13 @@ public class Standings {
 
     public void saveToFile() {
         String rank = "";
-        for (int i = 0; i < ranking.length; i++) {
+        int length;
+        if (ranking.length > 10)
+            length = 10;
+        else
+            length = ranking.length;
+
+        for (int i = 0; i < length; i++) {
             rank += ranking[i].getName()+","+ranking[i].getResult()+" ";
         }
 

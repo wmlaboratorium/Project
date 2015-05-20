@@ -28,12 +28,12 @@ public class BestScoreActivity extends ActionBarActivity {
     }
 
     private void createRankingList() {
-        ranking.add(new BestScoreItem("player1", 50));
-        ranking.add(new BestScoreItem("player2", 70));
-        ranking.add(new BestScoreItem("player3", 60));
-        ranking.add(new BestScoreItem("player4", 80));
-        ranking.add(new BestScoreItem("player5", 90));
-        ranking.add(new BestScoreItem("player6", 100));
+        BestScoreItem tab[] = Standings.getInstance(getApplicationContext()).getRankingTable();
+
+        if (tab != null) {
+            for (BestScoreItem item : tab)
+                ranking.add(item);
+        }
     }
 
 
@@ -74,9 +74,9 @@ public class BestScoreActivity extends ActionBarActivity {
 
             String color;
             if (counter%2 == 0)
-                color = "#7F7F7F";
+                color = "#59FFD6";
             else
-                color = "#505050";
+                color = "#007BFF";
             BestScoreItem current = ranking.get(position);
 
             TextView playerName = (TextView)itemView.findViewById(R.id.best_score_playerName);

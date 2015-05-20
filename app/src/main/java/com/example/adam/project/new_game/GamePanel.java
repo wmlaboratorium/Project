@@ -41,8 +41,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private ArrayBlockingQueue<Integer> inputX;
     private PlayerObject player;
     private ArrayList<GameObject> gameObjects;
-    private long enemyStartTime,
-            enemySpaceTime,
+    private long enemySpaceTime,
             enemyActualTime;
     private Random random = new Random();
     private Context context;
@@ -179,8 +178,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-    }
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -211,7 +209,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         player = new PlayerObject(playerFrames, 60, 100, 5);
         gameObjects = new ArrayList<GameObject>();
-        enemyStartTime = System.currentTimeMillis();
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
 
         gameThread.setRunning(true);
@@ -228,7 +225,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 gameObjects = new ArrayList<>();
             }
             else if (gameOver) {
-                System.out.println("Over");
                 gameThread.setRunning(false);
                 if (Standings.getInstance(context).isGoodResult(player.getScore())) {
                     Intent intent = new Intent(context, AddToRankingActivity.class);
@@ -236,7 +232,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     context.startActivity(intent);
                 }
                 else {
-
+                    Intent intent = new Intent(context, EndedGameActivity.class);
+                    context.startActivity(intent);
                 }
             }
             else {

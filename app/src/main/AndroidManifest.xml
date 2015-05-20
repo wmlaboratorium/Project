@@ -37,6 +37,11 @@
             android:label="@string/title_activity_add_to_ranking"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name=".new_game.EndedGameActivity"
+            android:label="@string/title_activity_ended_game"
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>
