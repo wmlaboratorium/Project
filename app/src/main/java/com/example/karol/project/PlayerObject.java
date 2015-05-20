@@ -16,15 +16,17 @@ public class PlayerObject extends GameObject {
     private int score,
             startY = (int)(GamePanel.HEIGHT*0.8),
             jumpHeight = Config.getInstance().getJumpHeight(),
-            lives = Config.getInstance().getPlayerLives();
+            hp = Config.getInstance().getPlayerStartHp();
     private Boolean up,
             playing = false,
             jumping = false;
     private long startTime;
     private Animation animation;
     private Paint paint = new Paint();
+ //   private static volatile PlayerObject instance = null;
 
     public PlayerObject(Bitmap frames[], int w, int h, int numFrames) {
+      //  instance = this;
         x = GamePanel.WIDTH/2;
         y = startY;
         dy = 0;
@@ -36,11 +38,6 @@ public class PlayerObject extends GameObject {
     }
 
     public void setUp(Boolean b) { up = b; }
-
-    @Override
-    public void update(int x, int y) {
-
-    }
 
     @Override
     public void update() {
@@ -67,36 +64,43 @@ public class PlayerObject extends GameObject {
         y += dy;
     }
 
-    @Override
-    public void move() {
-
-    }
-
-    @Override
-    public void onClick() {
-
-    }
 
     @Override
     public void draw(Canvas canvas) {
         canvas.drawBitmap(animation.getImage(), x - 100, y - 60, null);
         canvas.drawText("Score: "+score, 40, GamePanel.HEIGHT / 8, paint);
-        canvas.drawText("Lives: "+lives, 40, GamePanel.HEIGHT / 5, paint);
+        canvas.drawText("HP: "+hp, 40, GamePanel.HEIGHT / 5, paint);
     }
 
     public void addToScore(int additional) { score += additional; }
 
     public int getScore() { return score; }
 
-    public void loseLive() { lives -= 1; }
+    public void loseHp(int value) { hp -= value; }
 
-    public int getLives() { return lives; }
+    public int getHp() { return hp; }
 
-    public void addLives(int lives) { this.lives += lives; }
+    public void addHp(int value) {
+        if (hp + value <= 100)
+            this.hp += value;
+        else
+            hp = 100;
+    }
 
     public Boolean getPlaying() { return playing; }
 
     public void setPlaying(Boolean b) { playing = b; }
 
-    public void reset() { score = 0; lives = 3; }
+    public void reset() { score = 0; hp = 100; }
+
+    @Override
+    public void move() {}
+
+    @Override
+    public void onClick() {}
+
+    @Override
+    public void update(int x, int y) {}
+
+    //public static synchronized PlayerObject getInstance() { return instance; }
 }

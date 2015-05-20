@@ -6,7 +6,6 @@ package com.example.adam.project.best_score;
 public class QuickSort {
 
     public static BestScoreItem[] Sort(BestScoreItem tab[], int x, int y) {
-
         int v, i, j;
         BestScoreItem tmp;
         i = x;
@@ -31,7 +30,6 @@ public class QuickSort {
             Sort(tab, x, j);
         if (i < y)
             Sort(tab, i, y);
-
 
         return tab;
     }

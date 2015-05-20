@@ -3,6 +3,8 @@ package com.example.adam.project.new_game;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
+import com.example.adam.project.best_score.Standings;
+
 /**
  * Created by Adam on 4/29/2015.
  */
@@ -24,7 +26,6 @@ public class GameThread extends Thread {
     public void run() {
         long startTime,
              targetTime = 1000/FPS;
-
 
         while (running) {
             startTime = System.currentTimeMillis();
@@ -58,7 +59,7 @@ public class GameThread extends Thread {
         }
     }
 
-    public void setRunning(Boolean running) {
-        this.running = running;
+    public void setRunning(Boolean b) {
+        running = b;
     }
 }

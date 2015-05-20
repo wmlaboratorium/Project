@@ -7,15 +7,15 @@ package com.example.adam.project.new_game;
 //Singleton configuration class
 public class Config {
     private static Config instance = null;
-    private static final int playerLives = 3;
+    private static final int playerStartHp = 100;
     private static final int jumpHeight = 200;
     private static final int enemyWidth = 60;
     private static final int enemyHeight = 60;
     private static final int bonusWidth = 25;
     private static final int bonusHeight = 25;
 
-    public static int getPlayerLives() {
-        return playerLives;
+    public static int getPlayerStartHp() {
+        return playerStartHp;
     }
 
     public static int getJumpHeight() {

@@ -1,6 +1,7 @@
 package com.example.adam.project.new_game;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -14,6 +15,7 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 
 import com.example.adam.project.R;
+import com.example.adam.project.best_score.BestScoreActivity;
 import com.example.karol.project.BonusObject;
 import com.example.adam.project.best_score.Standings;
 import com.example.karol.project.EnemyObject;
@@ -44,6 +46,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             enemyActualTime;
     private Random random = new Random();
     private Context context;
+    private Boolean gameOver = false;
 
     public GamePanel(Context context) {
         super(context);
@@ -113,7 +116,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 if(collision(obj, player)) {
                     //dodajemy losowa ilosc pkt zycia
                     gameObjects.remove(obj);
-                    player.addLives(random.nextInt(100) % 3 + 1);
+                    player.addHp(random.nextInt(20) + 10);
                     break;
                 } else if (obj.getX() < (WIDTH / 2 - 50) && !((BonusObject) obj).getJumped()) {
                     ((BonusObject) obj).setJumped(true);
@@ -123,9 +126,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (obj instanceof EnemyObject) {
                 if (collision(obj, player)) {
                     gameObjects.remove(obj);
-                    player.loseLive();
-                    if (player.getLives() < 1)
-                        gameOver();
+                    player.loseHp(20);
+                    if (player.getHp() < 1) {
+                        player.setPlaying(false);
+                        gameOver = true;
+                    }
                     break;
                 }
                 //Means that player jumped after enemy
@@ -138,19 +143,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //tutaj usuwamy smieci (byc moze malo optymalne ale na ta gre nie wplynie zbytnio ze wzgledu na brak duzej ilosci obiektow)
         for (GameObject obj : objectsToDelete)
             gameObjects.remove(obj);
-
-        System.out.println(gameObjects.size());
-    }
-
-
-    public void gameOver() {
-        player.setPlaying(false);
-
-        if (Standings.getInstance(context).isGoodResult(player.getScore())) {
-            System.out.println("Good Result");
-        }
-
-
     }
 
 
@@ -172,7 +164,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             background.draw(canvas);
             canvas.drawBitmap(ground, 0, GamePanel.HEIGHT - 30, null);
             player.draw(canvas);
-            if (player.getLives() < 1) {
+            if (player.getHp() < 1) {
                 Paint p = new Paint();
                 p.setTextSize(GamePanel.HEIGHT / 10);
                 canvas.drawText("GAME OVER!", GamePanel.WIDTH / 2 - 150, GamePanel.HEIGHT / 2, p);
@@ -230,16 +222,29 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            if (!player.getPlaying()) {
+            if (!player.getPlaying() && !gameOver) {
                 player.setPlaying(true);
-                player.reset();
                 gameObjects.clear();
                 gameObjects = new ArrayList<>();
-            } else {
+            }
+            else if (gameOver) {
+                System.out.println("Over");
+                gameThread.setRunning(false);
+                if (Standings.getInstance(context).isGoodResult(player.getScore())) {
+                    Intent intent = new Intent(context, AddToRankingActivity.class);
+                    intent.putExtra("score", player.getScore());
+                    context.startActivity(intent);
+                }
+                else {
+
+                }
+            }
+            else {
                 player.setUp(true);
             }
             return true;
-        } else if (e.getAction() == MotionEvent.ACTION_UP) {
+        }
+        else if (e.getAction() == MotionEvent.ACTION_UP) {
             player.setUp(false);
             return true;
         }

@@ -21,22 +21,33 @@ public class Standings {
 
     //Function check that our result is in top 10 results of all time
     public Boolean isGoodResult(int score) {
+
         String input = readFromFile();
-        String results[] = input.split(" ");
-        ranking = new BestScoreItem[results.length + 1];
+        if (!input.equals("")) {
+            String results[] = input.split(" ");
+            System.out.println(input+": "+results.length);
+            ranking = new BestScoreItem[results.length + 1];
 
-        for (int i = 0; i < results.length; i++) {
-            String data[] = results[i].split(",");
-            ranking[i] = new BestScoreItem(data[0], Integer.parseInt(data[1]));
-        }
-        ranking[results.length] = new BestScoreItem("NewScore", score);
-        ranking = QuickSort.Sort(ranking, 0, ranking.length - 1);
+            for (int i = 0; i < results.length; i++) {
+                String data[] = results[i].split(",");
+                ranking[i] = new BestScoreItem(data[0], Integer.parseInt(data[1]));
+            }
+            ranking[results.length] = new BestScoreItem("NewScore", score);
+            ranking = QuickSort.Sort(ranking, 0, ranking.length - 1);
 
-        for (int i = 0; i < ranking.length; i++) {
-            if (ranking[i].getName().equals("NewScore") && i < 10) {
-                return true;
+            for (int i = 0; i < ranking.length; i++) {
+                if (ranking[i].getName().equals("NewScore") && i < 10) {
+                    return true;
+                }
             }
         }
+        else {
+            System.out.println(input+": new");
+            ranking = new BestScoreItem[1];
+            ranking[0] = new BestScoreItem("NewScore", score);
+            return true;
+        }
+
         return false;
     }
 
@@ -53,7 +64,7 @@ public class Standings {
         catch (Exception e) {}
 
         String contents = new String(bytes);
-        System.out.println("Wynik "+contents);
+        System.out.println("read: "+contents);
         return contents;
     }
 
@@ -65,7 +76,6 @@ public class Standings {
                 break;
             }
         }
-
         saveToFile();
     }
 
