@@ -21,27 +21,10 @@ public class BonusObject extends GameObject {
         super.y = y;
         width = bitmap.getWidth();
         height = bitmap.getHeight();
-
-
         speed = 10 + random.nextInt(10);
     }
 
-    @Override
-    public void update(int x, int y) {
-
-    }
-
     public void update() { x -= speed; }
-
-    @Override
-    public void move() {
-
-    }
-
-    @Override
-    public void onClick() {
-
-    }
 
     @Override
     public void draw(Canvas canvas) {

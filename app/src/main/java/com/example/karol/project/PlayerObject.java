@@ -23,21 +23,18 @@ public class PlayerObject extends GameObject {
     private long startTime;
     private Animation animation;
     private Paint paint = new Paint();
- //   private static volatile PlayerObject instance = null;
 
-    public PlayerObject(Bitmap frames[], int w, int h, int numFrames) {
-      //  instance = this;
+    public PlayerObject(Bitmap frames[], int w, int h) {
         x = GamePanel.WIDTH/2;
         y = startY;
         dy = 0;
         score = 0;
         height = h;
         width = w;
-        animation = new Animation(numFrames, frames, 100);
+        animation = new Animation(frames, 100);
         paint.setTextSize(GamePanel.HEIGHT / 15);
     }
 
-    public void setUp(Boolean b) { up = b; }
 
     @Override
     public void update() {
@@ -55,11 +52,9 @@ public class PlayerObject extends GameObject {
                     dy = 0;
                     jumping = false;
                 }
-                else if (y < startY - jumpHeight)
-                    dy = 20;
+                else if (y < startY - jumpHeight) dy = 20;
             }
-            else
-                dy = 0;
+            else dy = 0;
         }
         y += dy;
     }
@@ -71,6 +66,8 @@ public class PlayerObject extends GameObject {
         canvas.drawText("Score: "+score, 40, GamePanel.HEIGHT / 8, paint);
         canvas.drawText("HP: "+hp, 40, GamePanel.HEIGHT / 5, paint);
     }
+
+    public void setUp(Boolean b) { up = b; }
 
     public void addToScore(int additional) { score += additional; }
 
@@ -92,15 +89,4 @@ public class PlayerObject extends GameObject {
     public void setPlaying(Boolean b) { playing = b; }
 
     public void reset() { score = 0; hp = 100; }
-
-    @Override
-    public void move() {}
-
-    @Override
-    public void onClick() {}
-
-    @Override
-    public void update(int x, int y) {}
-
-    //public static synchronized PlayerObject getInstance() { return instance; }
 }

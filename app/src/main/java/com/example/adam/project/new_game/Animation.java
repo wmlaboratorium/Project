@@ -7,14 +7,12 @@ import android.graphics.Bitmap;
  */
 public class Animation {
     private Bitmap frames[];
-    private int currentFrame,
-                framesNum;
+    private int currentFrame;
     private long startTime,
                  delay;
     private Boolean playedOnce;
 
-    public Animation(int framesNum, Bitmap frames[], long delay) {
-        this.framesNum = framesNum;
+    public Animation(Bitmap frames[], long delay) {
         this.frames = frames;
         currentFrame = 0;
         startTime = System.currentTimeMillis();
@@ -32,7 +30,7 @@ public class Animation {
 
         if (elapsed > delay) {
             currentFrame++;
-            if (currentFrame >= framesNum) {
+            if (currentFrame >= frames.length) {
                 currentFrame = 0;
                 playedOnce = true;
             }

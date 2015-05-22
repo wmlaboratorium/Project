@@ -9,10 +9,10 @@ public class Config {
     private static Config instance = null;
     private static final int playerStartHp = 100;
     private static final int jumpHeight = 200;
-    private static final int enemyWidth = 60;
-    private static final int enemyHeight = 60;
-    private static final int bonusWidth = 25;
-    private static final int bonusHeight = 25;
+    private static final int enemyWidth = 80;
+    private static final int enemyHeight = 80;
+    private static final int bonusWidth = 40;
+    private static final int bonusHeight = 40;
 
     public static int getPlayerStartHp() {
         return playerStartHp;

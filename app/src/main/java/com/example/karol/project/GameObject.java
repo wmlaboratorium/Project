@@ -26,7 +26,6 @@ public abstract class GameObject implements Serializable {
             width,
             height;
 
-
     /**
      * ***************KONSTRUKTORY**********************
      */
@@ -94,15 +93,9 @@ public abstract class GameObject implements Serializable {
     }
 
     //to funkcja ktora bedzie updateowac stan obiektu (czyt. przesuniecia itp)
-    public abstract void update(int x, int y);
+    //public abstract void update(int x, int y);
 
     public abstract void update();
-
-    //na wszelki wypadek wrzucilem, bo sam jeszcze nie wiem czy sie przyda, bynajmniej tutaj beda algorytmy przesuwania ?
-    public abstract void move();
-
-    //no jezeli sobie na obiekt klikniemy to zostanie to wywolane (zakladam ze w wiekszosci obiektow bedzie puste :P)
-    public abstract void onClick();
 
     //rysujemy na ekranie nasz obiekt
     public abstract void draw(Canvas canvas);

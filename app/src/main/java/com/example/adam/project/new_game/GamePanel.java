@@ -30,14 +30,13 @@ import java.util.concurrent.ArrayBlockingQueue;
  * Created by Adam on 4/29/2015.
  */
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int PLAYER_SPEED_X = 10;
-    public static final int PLAYER_SPEED_Y = 5;
     public static int WIDTH = 856;
     public static int HEIGHT = 480;
     public static int MOVE_SPEED = -5;
     private GameThread gameThread;
     private Background background;
-    private Bitmap ground;
+    private Bitmap ground,
+                   penguinFrames[];
     private ArrayBlockingQueue<Integer> inputX;
     private PlayerObject player;
     private ArrayList<GameObject> gameObjects;
@@ -70,24 +69,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             //Add enemy objects on timer
             if (gameObjects.size() == 0) {
-                gameObjects.add(new EnemyObject(
-                        BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object),
+                gameObjects.add(new EnemyObject(penguinFrames,
                         WIDTH + 10,
                         (int) (HEIGHT * 0.8),
                         Config.getInstance().getEnemyWidth(),
-                        Config.getInstance().getEnemyHeight(),
-                        2));
+                        Config.getInstance().getEnemyHeight()));
                 enemySpaceTime = random.nextInt(2000) + 100;
                 enemyActualTime = System.currentTimeMillis();
             } else {
                 if (System.currentTimeMillis() - enemyActualTime > enemySpaceTime + 500) {
-                    gameObjects.add(new EnemyObject(
-                            BitmapFactory.decodeResource(getResources(), R.drawable.enemy_object),
+                    gameObjects.add(new EnemyObject(penguinFrames,
                             WIDTH + 10,
                             (int) (HEIGHT * 0.8),
                             Config.getInstance().getEnemyWidth(),
-                            Config.getInstance().getEnemyHeight(),
-                            2));
+                            Config.getInstance().getEnemyHeight()));
                     enemySpaceTime = random.nextInt(2000) + 100;
                     enemyActualTime = System.currentTimeMillis();
                 }
@@ -169,9 +164,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 canvas.drawText("GAME OVER!", GamePanel.WIDTH / 2 - 150, GamePanel.HEIGHT / 2, p);
             }
 
-            for (GameObject obj : gameObjects) {
+            for (GameObject obj : gameObjects)
                 obj.draw(canvas);
-            }
+
             canvas.restoreToCount(savedState);
         }
     }
@@ -179,6 +174,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -190,8 +186,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 gameThread.setRunning(false);
                 gameThread.join();
                 retry = false;
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
         }
     }
 
@@ -200,6 +195,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background2));
         Bitmap playerFrames[] = new Bitmap[5];
+        penguinFrames = new Bitmap[4];
 
         playerFrames[0] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_1_frame);
         playerFrames[1] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_2_frame);
@@ -207,7 +203,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         playerFrames[3] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_4_frame);
         playerFrames[4] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_5_frame);
 
-        player = new PlayerObject(playerFrames, 60, 100, 5);
+        penguinFrames[0] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin1);
+        penguinFrames[1] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin2);
+        penguinFrames[2] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin3);
+        penguinFrames[3] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin4);
+
+        player = new PlayerObject(playerFrames, 60, 100);
         gameObjects = new ArrayList<GameObject>();
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
 
@@ -236,9 +237,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     context.startActivity(intent);
                 }
             }
-            else {
+            else
                 player.setUp(true);
-            }
             return true;
         }
         else if (e.getAction() == MotionEvent.ACTION_UP) {

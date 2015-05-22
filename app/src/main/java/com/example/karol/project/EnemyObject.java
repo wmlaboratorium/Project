@@ -3,6 +3,8 @@ package com.example.karol.project;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.example.adam.project.new_game.Animation;
+
 import java.util.Random;
 
 /**
@@ -13,40 +15,28 @@ public class EnemyObject extends GameObject {
     private int speed,
             scoreValue = 2;
     private Random random = new Random();
-    private Bitmap bitmap;
     private Boolean jumped = false;
+    private Animation animation;
 
-    public EnemyObject(Bitmap bitmap, int x, int y, int w, int h, int numFrames) {
-        this.bitmap = bitmap;
+    public EnemyObject(Bitmap frames[], int x, int y, int w, int h) {
         super.x = x;
         super.y = y;
-        width = bitmap.getWidth();
-        height = bitmap.getHeight();
-
+        width = w;
+        height = h;
+        animation = new Animation(frames, 100);
         speed = 15 + random.nextInt(15);
     }
 
     @Override
-    public void update(int x, int y) {
-
-    }
-
-    public void update() { x -= speed; }
-
-    @Override
-    public void move() {
-
-    }
-
-    @Override
-    public void onClick() {
-
+    public void update() {
+        animation.update();
+        x -= speed;
     }
 
     @Override
     public void draw(Canvas canvas) {
         try {
-            canvas.drawBitmap(bitmap, x, y, null);
+            canvas.drawBitmap(animation.getImage(), x - 100, y - 30, null);
         }
         catch (Exception e) {}
     }
