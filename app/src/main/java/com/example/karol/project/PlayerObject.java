@@ -3,7 +3,6 @@ package com.example.karol.project;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 import com.example.adam.project.new_game.Animation;
 import com.example.adam.project.new_game.Config;
 import com.example.adam.project.new_game.GamePanel;
@@ -20,7 +19,6 @@ public class PlayerObject extends GameObject {
     private Boolean up,
             playing = false,
             jumping = false;
-    private long startTime;
     private Animation animation;
     private Paint paint = new Paint();
 
@@ -40,18 +38,12 @@ public class PlayerObject extends GameObject {
     public void update() {
         animation.update();
         if (up) {
-            if (y >= startY) {
-                dy = -20;
-                jumping = true;
-            }
+            if (y >= startY) { dy = -20;  jumping = true; }
             up = false;
         }
         else {
             if (jumping) {
-                if (y >= startY) {
-                    dy = 0;
-                    jumping = false;
-                }
+                if (y >= startY) { dy = 0;  jumping = false; }
                 else if (y < startY - jumpHeight) dy = 20;
             }
             else dy = 0;
@@ -63,8 +55,28 @@ public class PlayerObject extends GameObject {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawBitmap(animation.getImage(), x - 100, y - 60, null);
-        canvas.drawText("Score: "+score, 40, GamePanel.HEIGHT / 8, paint);
-        canvas.drawText("HP: "+hp, 40, GamePanel.HEIGHT / 5, paint);
+        canvas.drawText("Score: "+score, 40, (int)(GamePanel.HEIGHT * 0.1), paint);
+        canvas.drawText("HP: "+hp, 40, (int)(GamePanel.HEIGHT * 0.18), paint);
+        canvas.drawText("Game Time: "+getTimeInMinutes(GamePanel.duringGameInSeconds),
+                        40, (int)(GamePanel.HEIGHT * 0.26), paint);
+    }
+
+    public String getTimeInMinutes(int seconds) {
+        String result = "";
+        if (seconds >= 60)
+            result += seconds/60 + "\"";
+
+        if (seconds%60 < 10)
+            result += "0";
+
+        result += seconds%60 + "\"";
+        return result;
+    }
+
+    public void addHp(int value) {
+        hp += value;
+        if (hp > 100)
+            hp = 100;
     }
 
     public void setUp(Boolean b) { up = b; }
@@ -77,16 +89,7 @@ public class PlayerObject extends GameObject {
 
     public int getHp() { return hp; }
 
-    public void addHp(int value) {
-        if (hp + value <= 100)
-            this.hp += value;
-        else
-            hp = 100;
-    }
-
     public Boolean getPlaying() { return playing; }
 
     public void setPlaying(Boolean b) { playing = b; }
-
-    public void reset() { score = 0; hp = 100; }
 }

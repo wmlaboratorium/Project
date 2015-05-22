@@ -13,6 +13,18 @@ public class Config {
     private static final int enemyHeight = 80;
     private static final int bonusWidth = 40;
     private static final int bonusHeight = 40;
+    private static final int enemySpeed = 20;
+    private static final int bonusSpeed = 15;
+    private static int enemySpaceTime = 800;
+
+
+    public static int getEnemySpaceTime() { return enemySpaceTime; }
+
+    public void setEnemySpaceTime(int enemySpaceTime) { this.enemySpaceTime = enemySpaceTime; }
+
+    public static int getEnemySpeed() { return enemySpeed; }
+
+    public static int getBonusSpeed() { return bonusSpeed; }
 
     public static int getPlayerStartHp() {
         return playerStartHp;
@@ -30,18 +42,17 @@ public class Config {
         return enemyHeight;
     }
 
-    public static synchronized Config getInstance() {
-        if (instance == null) {
-            instance = new Config();
-        }
-        return instance;
-    }
-
     public static int getBonusWidth() {
         return bonusWidth;
     }
 
     public static int getBonusHeight() {
         return bonusHeight;
+    }
+
+    public static synchronized Config getInstance() {
+        if (instance == null)
+            instance = new Config();
+        return instance;
     }
 }

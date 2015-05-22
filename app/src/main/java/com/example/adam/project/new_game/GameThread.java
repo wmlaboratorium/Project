@@ -3,14 +3,11 @@ package com.example.adam.project.new_game;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-import com.example.adam.project.best_score.Standings;
-
 /**
  * Created by Adam on 4/29/2015.
  */
 public class GameThread extends Thread {
-    private int FPS = 30,
-                frameCount = 0;
+    private int FPS = 30;
     private SurfaceHolder surfaceHolder;
     private GamePanel gamePanel;
     private boolean running;
@@ -25,7 +22,7 @@ public class GameThread extends Thread {
     @Override
     public void run() {
         long startTime,
-             targetTime = 1000/FPS;
+             targetTime = 1000 / FPS;
 
         while (running) {
             startTime = System.currentTimeMillis();
@@ -48,14 +45,12 @@ public class GameThread extends Thread {
                 }
             }
 
+            //Needed to archive exactly how many FPS as we want
             long usedTime = System.currentTimeMillis() - startTime;
             try {
                 Thread.sleep(targetTime - usedTime);
-                if (frameCount%20 == 0) {}
-                   // System.out.println("We can have "+1000/usedTime+" FPS");
             }
             catch (Exception e) {}
-            frameCount++;
         }
     }
 

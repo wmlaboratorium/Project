@@ -2,8 +2,8 @@ package com.example.karol.project;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
 import com.example.adam.project.new_game.Animation;
+import com.example.adam.project.new_game.GamePanel;
 
 import java.util.Random;
 
@@ -24,7 +24,7 @@ public class EnemyObject extends GameObject {
         width = w;
         height = h;
         animation = new Animation(frames, 100);
-        speed = 15 + random.nextInt(15);
+        speed = GamePanel.actualEnemySpeed + random.nextInt((int)(GamePanel.actualEnemySpeed*0.6));
     }
 
     @Override

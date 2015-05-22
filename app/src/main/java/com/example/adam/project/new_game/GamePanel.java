@@ -13,18 +13,14 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-
 import com.example.adam.project.R;
-import com.example.adam.project.best_score.BestScoreActivity;
 import com.example.karol.project.BonusObject;
 import com.example.adam.project.best_score.Standings;
 import com.example.karol.project.EnemyObject;
 import com.example.karol.project.GameObject;
 import com.example.karol.project.PlayerObject;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * Created by Adam on 4/29/2015.
@@ -33,15 +29,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static int WIDTH = 856;
     public static int HEIGHT = 480;
     public static int MOVE_SPEED = -5;
+    public static volatile int duringGameInSeconds,
+                               actualEnemySpeed = Config.getInstance().getEnemySpeed();
     private GameThread gameThread;
     private Background background;
     private Bitmap ground,
                    penguinFrames[];
-    private ArrayBlockingQueue<Integer> inputX;
     private PlayerObject player;
     private ArrayList<GameObject> gameObjects;
     private long enemySpaceTime,
-            enemyActualTime;
+            enemyActualTime,
+            gameTime;
     private Random random = new Random();
     private Context context;
     private Boolean gameOver = false;
@@ -64,26 +62,37 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         if (player.getPlaying()) {
+            duringGameInSeconds = (int)((System.currentTimeMillis() - gameTime) / 1000);
             background.update(MOVE_SPEED);
             player.update();
 
-            //Add enemy objects on timer
+            //Add enemy objects to screen in fixed spaces of time
             if (gameObjects.size() == 0) {
                 gameObjects.add(new EnemyObject(penguinFrames,
                         WIDTH + 10,
                         (int) (HEIGHT * 0.8),
                         Config.getInstance().getEnemyWidth(),
                         Config.getInstance().getEnemyHeight()));
-                enemySpaceTime = random.nextInt(2000) + 100;
+                int time = Config.getInstance().getEnemySpaceTime();
+                enemySpaceTime = random.nextInt((int)(time * 1.5)) + time;
                 enemyActualTime = System.currentTimeMillis();
-            } else {
-                if (System.currentTimeMillis() - enemyActualTime > enemySpaceTime + 500) {
+            }
+            else {
+                if (System.currentTimeMillis() - enemyActualTime > enemySpaceTime) {
+                    actualEnemySpeed = Config.getEnemySpeed() + (int)(duringGameInSeconds / 10);
+                    if (actualEnemySpeed > 35)
+                        actualEnemySpeed = 35;
                     gameObjects.add(new EnemyObject(penguinFrames,
                             WIDTH + 10,
                             (int) (HEIGHT * 0.8),
                             Config.getInstance().getEnemyWidth(),
                             Config.getInstance().getEnemyHeight()));
-                    enemySpaceTime = random.nextInt(2000) + 100;
+
+                    //Reducing spaces between appearing new enemy objects while during the game
+                    int time = (int)(Config.getInstance().getEnemySpaceTime()*(1.0 - (duringGameInSeconds/120.0)));
+                    if (time < 500)
+                        time = 500;
+                    enemySpaceTime = random.nextInt((int)(time * 1.5)) + time;
                     enemyActualTime = System.currentTimeMillis();
                 }
             }
@@ -92,10 +101,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 gameObjects.add(new BonusObject(
                         BitmapFactory.decodeResource(getResources(), R.drawable.bonus),
                         WIDTH + 10,
-                        (int) (HEIGHT * 0.8),
-                        Config.getInstance().getBonusWidth(),
-                        Config.getInstance().getBonusHeight(),
-                        2));
+                        (int) (HEIGHT * 0.8)));
             }
         }
 
@@ -106,9 +112,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (obj.getX() < -20)
                 objectsToDelete.add(obj);
 
+            //Adding bonus amount of hp to player
             if(obj instanceof BonusObject) {
-                if(collision(obj, player)) {
-                    //dodajemy losowa ilosc pkt zycia
+                if(isCollision(obj, player)) {
                     gameObjects.remove(obj);
                     player.addHp(random.nextInt(20) + 10);
                     break;
@@ -117,8 +123,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
 
+            //Checking collisions between player and enemies
             if (obj instanceof EnemyObject) {
-                if (collision(obj, player)) {
+                if (isCollision(obj, player)) {
                     gameObjects.remove(obj);
                     player.loseHp(20);
                     if (player.getHp() < 1) {
@@ -134,16 +141,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         }
-        //tutaj usuwamy smieci (byc moze malo optymalne ale na ta gre nie wplynie zbytnio ze wzgledu na brak duzej ilosci obiektow)
+        //Deleting out of the screen Game Objects
         for (GameObject obj : objectsToDelete)
             gameObjects.remove(obj);
     }
 
 
-    public Boolean collision(GameObject o1, GameObject o2) {
-        if (Rect.intersects(o1.getRect(), o2.getRect())) {
+    //Function which detecting collisions between two Game Objects
+    public Boolean isCollision(GameObject o1, GameObject o2) {
+        if (Rect.intersects(o1.getRect(), o2.getRect()))
             return true;
-        }
         return false;
     }
 
@@ -166,7 +173,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             for (GameObject obj : gameObjects)
                 obj.draw(canvas);
-
             canvas.restoreToCount(savedState);
         }
     }
@@ -193,6 +199,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        //Initialize all necessary Game Objects and Attributes
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background2));
         Bitmap playerFrames[] = new Bitmap[5];
         penguinFrames = new Bitmap[4];
@@ -222,6 +229,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             if (!player.getPlaying() && !gameOver) {
                 player.setPlaying(true);
+                gameTime = System.currentTimeMillis();
                 gameObjects.clear();
                 gameObjects = new ArrayList<>();
             }
