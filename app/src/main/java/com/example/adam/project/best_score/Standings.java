@@ -20,7 +20,7 @@ public class Standings {
 
 
     //Function check that our result is in top 10 results of all time
-    public Boolean isGoodResult(int score) {
+    public Boolean isGoodResult(int score, String time) {
         String input = readFromFile();
         if (!input.equals("")) {
             String results[] = input.split(" ");
@@ -28,9 +28,9 @@ public class Standings {
 
             for (int i = 0; i < results.length; i++) {
                 String data[] = results[i].split(",");
-                ranking[i] = new BestScoreItem(data[0], Integer.parseInt(data[1]));
+                ranking[i] = new BestScoreItem(data[0], Integer.parseInt(data[1]), data[2]);
             }
-            ranking[results.length] = new BestScoreItem("NewScore", score);
+            ranking[results.length] = new BestScoreItem("NewScore", score, time);
             ranking = QuickSort.Sort(ranking, 0, ranking.length - 1);
 
             for (int i = 0; i < ranking.length; i++) {
@@ -41,7 +41,7 @@ public class Standings {
         }
         else {
             ranking = new BestScoreItem[1];
-            ranking[0] = new BestScoreItem("NewScore", score);
+            ranking[0] = new BestScoreItem("NewScore", score, time);
             return true;
         }
         return false;
@@ -62,7 +62,7 @@ public class Standings {
 
             for (int i = 0; i < length; i++) {
                 String data[] = results[i].split(",");
-                ranking[i] = new BestScoreItem(data[0], Integer.parseInt(data[1]));
+                ranking[i] = new BestScoreItem(data[0], Integer.parseInt(data[1]), data[2]);
             }
             ranking = QuickSort.Sort(ranking, 0, ranking.length - 1);
             return ranking;
@@ -107,9 +107,8 @@ public class Standings {
         else
             length = ranking.length;
 
-        for (int i = 0; i < length; i++) {
-            rank += ranking[i].getName()+","+ranking[i].getResult()+" ";
-        }
+        for (int i = 0; i < length; i++)
+            rank += ranking[i].getName()+","+ranking[i].getResult()+","+ranking[i].getTime()+" ";
 
         try {
             FileOutputStream stream = new FileOutputStream(file);

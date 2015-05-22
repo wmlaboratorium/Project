@@ -20,7 +20,6 @@ public abstract class GameObject implements Serializable {
 
     protected int x,
             y,
-            dx,
             dy,
             width,
             height;

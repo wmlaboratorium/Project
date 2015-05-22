@@ -87,6 +87,10 @@ public class BestScoreActivity extends ActionBarActivity {
             playerScore.setText(current.getResult()+"pkt");
             playerScore.setBackgroundColor(Color.parseColor(color));
 
+            TextView playerTime = (TextView)itemView.findViewById(R.id.best_score_playerTime);
+            playerTime.setText(current.getTime());
+            playerTime.setBackgroundColor(Color.parseColor(color));
+
             counter++;
             return itemView;
         }

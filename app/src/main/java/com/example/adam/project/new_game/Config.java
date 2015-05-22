@@ -15,12 +15,13 @@ public class Config {
     private static final int bonusHeight = 40;
     private static final int enemySpeed = 20;
     private static final int bonusSpeed = 15;
-    private static int enemySpaceTime = 800;
+    private static final int enemySpaceTime = 800;
+    private static final int backgroundMoveSpeed = -5;
 
+
+    public static int getBackgroundMoveSpeed() { return backgroundMoveSpeed; }
 
     public static int getEnemySpaceTime() { return enemySpaceTime; }
-
-    public void setEnemySpaceTime(int enemySpaceTime) { this.enemySpaceTime = enemySpaceTime; }
 
     public static int getEnemySpeed() { return enemySpeed; }
 

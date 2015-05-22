@@ -21,6 +21,7 @@ public class PlayerObject extends GameObject {
             jumping = false;
     private Animation animation;
     private Paint paint = new Paint();
+    private String time;
 
     public PlayerObject(Bitmap frames[], int w, int h) {
         x = GamePanel.WIDTH/2;
@@ -57,8 +58,8 @@ public class PlayerObject extends GameObject {
         canvas.drawBitmap(animation.getImage(), x - 100, y - 60, null);
         canvas.drawText("Score: "+score, 40, (int)(GamePanel.HEIGHT * 0.1), paint);
         canvas.drawText("HP: "+hp, 40, (int)(GamePanel.HEIGHT * 0.18), paint);
-        canvas.drawText("Game Time: "+getTimeInMinutes(GamePanel.duringGameInSeconds),
-                        40, (int)(GamePanel.HEIGHT * 0.26), paint);
+        time = getTimeInMinutes(GamePanel.duringGameInSeconds);
+        canvas.drawText("Game Time: "+time, 40, (int)(GamePanel.HEIGHT * 0.26), paint);
     }
 
     public String getTimeInMinutes(int seconds) {
@@ -78,6 +79,8 @@ public class PlayerObject extends GameObject {
         if (hp > 100)
             hp = 100;
     }
+
+    public String getTime() { return time; }
 
     public void setUp(Boolean b) { up = b; }
 

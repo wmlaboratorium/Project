@@ -26,9 +26,9 @@ import java.util.Random;
  * Created by Adam on 4/29/2015.
  */
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static int WIDTH = 856;
-    public static int HEIGHT = 480;
-    public static int MOVE_SPEED = -5;
+    public static int WIDTH;
+    public static int HEIGHT;
+    public static int MOVE_SPEED = Config.getBackgroundMoveSpeed();
     public static volatile int duringGameInSeconds,
                                actualEnemySpeed = Config.getInstance().getEnemySpeed();
     private GameThread gameThread;
@@ -79,7 +79,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
             else {
                 if (System.currentTimeMillis() - enemyActualTime > enemySpaceTime) {
-                    actualEnemySpeed = Config.getEnemySpeed() + (int)(duringGameInSeconds / 10);
+                    actualEnemySpeed = Config.getEnemySpeed() + (int)(duringGameInSeconds * 0.1);
                     if (actualEnemySpeed > 35)
                         actualEnemySpeed = 35;
                     gameObjects.add(new EnemyObject(penguinFrames,
@@ -167,8 +167,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             player.draw(canvas);
             if (player.getHp() < 1) {
                 Paint p = new Paint();
-                p.setTextSize(GamePanel.HEIGHT / 10);
-                canvas.drawText("GAME OVER!", GamePanel.WIDTH / 2 - 150, GamePanel.HEIGHT / 2, p);
+                p.setTextSize((int)(GamePanel.HEIGHT * 0.15));
+                p.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText("GAME OVER!", GamePanel.WIDTH / 2 , GamePanel.HEIGHT / 2, p);
             }
 
             for (GameObject obj : gameObjects)
@@ -235,7 +236,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
             else if (gameOver) {
                 gameThread.setRunning(false);
-                if (Standings.getInstance(context).isGoodResult(player.getScore())) {
+                if (Standings.getInstance(context).isGoodResult(player.getScore(), player.getTime())) {
                     Intent intent = new Intent(context, AddToRankingActivity.class);
                     intent.putExtra("score", player.getScore());
                     context.startActivity(intent);

@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-
 import com.example.adam.project.R;
 import com.example.adam.project.best_score.BestScoreActivity;
 import com.example.adam.project.new_game.GameActivity;
@@ -16,7 +15,7 @@ public class MainActivity extends Activity {
 
     private ImageButton bestScoreButton,
                         startGameButton,
-                        optionsButton;
+                        exitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +46,10 @@ public class MainActivity extends Activity {
         });
 
 
-        optionsButton = (ImageButton)findViewById(R.id.button_options);
-        optionsButton.setOnClickListener(new View.OnClickListener() {
+        exitButton = (ImageButton)findViewById(R.id.button_exit);
+        exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {}
+            public void onClick(View v) { finish(); }
         });
     }
 
@@ -64,9 +63,9 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
             return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 }

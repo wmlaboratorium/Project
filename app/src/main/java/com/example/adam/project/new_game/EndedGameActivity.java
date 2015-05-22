@@ -35,6 +35,7 @@ public class EndedGameActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -45,6 +46,7 @@ public class EndedGameActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -55,6 +57,7 @@ public class EndedGameActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), BestScoreActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

@@ -34,12 +34,15 @@ public class AddToRankingActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String name = editText.getText().toString();
+                name = name.replace(" ","_");
+                name = name.replace(",","_");
                 if (name.length() < 3)
                     Toast.makeText(getApplicationContext(), "Nazwa musi zawierac conajmniej 3 znaki", Toast.LENGTH_LONG).show();
                 else {
                     Standings.getInstance(getApplicationContext()).addToRanking(name);;
                     Intent intent = new Intent(AddToRankingActivity.this, EndedGameActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

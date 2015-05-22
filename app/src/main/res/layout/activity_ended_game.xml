@@ -12,6 +12,7 @@
         android:layout_height="60dp"
         android:text="New Game"
         android:textSize="30dp"
+        android:layout_marginBottom="30dp"
         android:id="@+id/ended_game_newGame"/>
 
     <Button
@@ -20,6 +21,7 @@
         android:text="Main Menu"
         android:textSize="30dp"
         android:layout_below="@+id/ended_game_newGame"
+        android:layout_marginBottom="30dp"
         android:id="@+id/ended_game_mainMenu"/>
 
     <Button
