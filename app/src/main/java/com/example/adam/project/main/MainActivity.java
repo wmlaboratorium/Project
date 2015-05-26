@@ -49,7 +49,10 @@ public class MainActivity extends Activity {
         exitButton = (ImageButton)findViewById(R.id.button_exit);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { finish(); }
+            public void onClick(View v) {
+                moveTaskToBack(true);
+                finish();
+            }
         });
     }
 

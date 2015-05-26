@@ -4,6 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#91FF47"
     tools:context="com.example.adam.project.new_game.EndedGameActivity">
 
 
@@ -12,6 +13,7 @@
         android:layout_height="60dp"
         android:text="New Game"
         android:textSize="30dp"
+        android:background="#FF9812"
         android:layout_marginBottom="30dp"
         android:id="@+id/ended_game_newGame"/>
 
@@ -20,6 +22,7 @@
         android:layout_height="60dp"
         android:text="Main Menu"
         android:textSize="30dp"
+        android:background="#FF9812"
         android:layout_below="@+id/ended_game_newGame"
         android:layout_marginBottom="30dp"
         android:id="@+id/ended_game_mainMenu"/>
@@ -29,6 +32,7 @@
         android:layout_height="60dp"
         android:text="Hall Of Fame"
         android:textSize="30dp"
+        android:background="#FF9812"
         android:layout_below="@+id/ended_game_mainMenu"
         android:id="@+id/ended_game_ranking"/>
 

@@ -25,6 +25,7 @@
         android:id="@+id/best_score_ListView"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
+        android:background="#61BF17"
         android:layout_below="@+id/best_score_label"
         android:layout_alignParentBottom="true" />
 

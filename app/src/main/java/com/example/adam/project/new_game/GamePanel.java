@@ -26,9 +26,9 @@ import java.util.Random;
  * Created by Adam on 4/29/2015.
  */
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static int WIDTH;
-    public static int HEIGHT;
-    public static int MOVE_SPEED = Config.getBackgroundMoveSpeed();
+    public static int WIDTH,
+                      HEIGHT,
+                      MOVE_SPEED = Config.getBackgroundMoveSpeed();
     public static volatile int duringGameInSeconds,
                                actualEnemySpeed = Config.getInstance().getEnemySpeed();
     private GameThread gameThread;
@@ -47,6 +47,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public GamePanel(Context context) {
         super(context);
         this.context = context;
+
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
@@ -62,11 +63,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         if (player.getPlaying()) {
+
+            /***************** Add enemy objects to screen in fixed spaces of time ***************/
+
             duringGameInSeconds = (int)((System.currentTimeMillis() - gameTime) / 1000);
             background.update(MOVE_SPEED);
             player.update();
 
-            //Add enemy objects to screen in fixed spaces of time
             if (gameObjects.size() == 0) {
                 gameObjects.add(new EnemyObject(penguinFrames,
                         WIDTH + 10,
@@ -103,47 +106,53 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         WIDTH + 10,
                         (int) (HEIGHT * 0.8)));
             }
-        }
 
-        ArrayList<GameObject> objectsToDelete = new ArrayList<>();
+            /*************************************************************************************/
 
-        for (GameObject obj : gameObjects) {
-            obj.update();
-            if (obj.getX() < -20)
-                objectsToDelete.add(obj);
+            /**************************     Updating Game Objects     ****************************/
 
-            //Adding bonus amount of hp to player
-            if(obj instanceof BonusObject) {
-                if(isCollision(obj, player)) {
-                    gameObjects.remove(obj);
-                    player.addHp(random.nextInt(20) + 10);
-                    break;
-                } else if (obj.getX() < (WIDTH / 2 - 50) && !((BonusObject) obj).getJumped()) {
-                    ((BonusObject) obj).setJumped(true);
-                }
-            }
+            ArrayList<GameObject> objectsToDelete = new ArrayList<>();
 
-            //Checking collisions between player and enemies
-            if (obj instanceof EnemyObject) {
-                if (isCollision(obj, player)) {
-                    gameObjects.remove(obj);
-                    player.loseHp(20);
-                    if (player.getHp() < 1) {
-                        player.setPlaying(false);
-                        gameOver = true;
+            for (GameObject obj : gameObjects) {
+                obj.update();
+                if (obj.getX() < -20)
+                    objectsToDelete.add(obj);
+
+                //Adding bonus amount of hp to player
+                if(obj instanceof BonusObject) {
+                    if(isCollision(obj, player)) {
+                        gameObjects.remove(obj);
+                        player.addHp(random.nextInt(20) + 10);
+                        break;
+                    } else if (obj.getX() < (WIDTH / 2 - 50) && !((BonusObject) obj).getJumped()) {
+                        ((BonusObject) obj).setJumped(true);
                     }
-                    break;
                 }
-                //Means that player jumped after enemy
-                else if (obj.getX() < (WIDTH / 2 - 50) && !((EnemyObject) obj).getJumped()) {
-                    ((EnemyObject) obj).setJumped(true);
-                    player.addToScore(((EnemyObject) obj).getScoreValue());
+
+                //Checking collisions between player and enemies
+                if (obj instanceof EnemyObject) {
+                    if (isCollision(obj, player)) {
+                        gameObjects.remove(obj);
+                        player.loseHp(20);
+                        if (player.getHp() < 1) {
+                            player.setPlaying(false);
+                            gameOver = true;
+                        }
+                        break;
+                    }
+                    //Means that player jumped after enemy
+                    else if (obj.getX() < (WIDTH / 2 - 50) && !((EnemyObject) obj).getJumped()) {
+                        ((EnemyObject) obj).setJumped(true);
+                        player.addToScore(((EnemyObject) obj).getScoreValue());
+                    }
                 }
             }
+            //Deleting out of the screen Game Objects
+            for (GameObject obj : objectsToDelete)
+                gameObjects.remove(obj);
+
+            /*************************************************************************************/
         }
-        //Deleting out of the screen Game Objects
-        for (GameObject obj : objectsToDelete)
-            gameObjects.remove(obj);
     }
 
 
@@ -165,11 +174,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             background.draw(canvas);
             canvas.drawBitmap(ground, 0, GamePanel.HEIGHT - 30, null);
             player.draw(canvas);
-            if (player.getHp() < 1) {
+            if (!player.getPlaying()) {
                 Paint p = new Paint();
-                p.setTextSize((int)(GamePanel.HEIGHT * 0.15));
+                p.setTextSize((int) (GamePanel.HEIGHT * 0.15));
                 p.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText("GAME OVER!", GamePanel.WIDTH / 2 , GamePanel.HEIGHT / 2, p);
+                
+                if (player.getHp() < 1)
+                    canvas.drawText("GAME OVER!", GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2, p);
+                else if (!player.getPlaying())
+                    canvas.drawText("TOUCH TO START!", GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2, p);
             }
 
             for (GameObject obj : gameObjects)
@@ -180,21 +193,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
-
-
-    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Boolean retry = true;
-        int counter = 0;
-        while (retry && counter < 1000) {
-            counter++;
-            try {
-                gameThread.setRunning(false);
-                gameThread.join();
-                retry = false;
-            } catch (Exception e) {}
+        try {
+            gameThread.setRunning(false);
+            gameThread.join();
+            gameThread = null;
         }
+        catch (Exception e) {}
     }
 
 
@@ -220,8 +225,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         gameObjects = new ArrayList<GameObject>();
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
 
-        gameThread.setRunning(true);
-        gameThread.start();
+        if (gameThread != null) {
+            gameThread.setRunning(true);
+            gameThread.start();
+        }
     }
 
 
@@ -235,7 +242,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 gameObjects = new ArrayList<>();
             }
             else if (gameOver) {
-                gameThread.setRunning(false);
                 if (Standings.getInstance(context).isGoodResult(player.getScore(), player.getTime())) {
                     Intent intent = new Intent(context, AddToRankingActivity.class);
                     intent.putExtra("score", player.getScore());
@@ -245,6 +251,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     Intent intent = new Intent(context, EndedGameActivity.class);
                     context.startActivity(intent);
                 }
+                surfaceDestroyed(getHolder());
             }
             else
                 player.setUp(true);
@@ -256,4 +263,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
         return super.onTouchEvent(e);
     }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 }

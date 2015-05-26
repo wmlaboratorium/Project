@@ -2,17 +2,13 @@ package com.example.adam.project.new_game;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import com.example.adam.project.R;
 import com.example.adam.project.best_score.BestScoreActivity;
-import com.example.adam.project.best_score.Standings;
 import com.example.adam.project.main.MainActivity;
 
 public class EndedGameActivity extends Activity {
@@ -35,7 +31,6 @@ public class EndedGameActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -46,7 +41,6 @@ public class EndedGameActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -57,7 +51,6 @@ public class EndedGameActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), BestScoreActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }

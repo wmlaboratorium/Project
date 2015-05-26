@@ -8,16 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.adam.project.R;
-import com.example.adam.project.best_score.BestScoreActivity;
 import com.example.adam.project.best_score.Standings;
 
 public class AddToRankingActivity extends Activity {
     private int score;
     private Button button;
     private EditText editText;
+    private TextView scoreView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,9 @@ public class AddToRankingActivity extends Activity {
 
         Intent intent = getIntent();
         score = intent.getIntExtra("score", 0);
+
+        scoreView = (TextView)findViewById(R.id.add_to_ranking_score);
+        scoreView.setText("Your Result: "+score);
 
         editText = (EditText)findViewById(R.id.add_to_ranking_editText);
 
@@ -39,15 +42,21 @@ public class AddToRankingActivity extends Activity {
                 if (name.length() < 3)
                     Toast.makeText(getApplicationContext(), "Nazwa musi zawierac conajmniej 3 znaki", Toast.LENGTH_LONG).show();
                 else {
-                    Standings.getInstance(getApplicationContext()).addToRanking(name);;
+                    Standings.getInstance(getApplicationContext()).addToRanking(name);
                     Intent intent = new Intent(AddToRankingActivity.this, EndedGameActivity.class);
                     startActivity(intent);
-                    finish();
                 }
             }
         });
     }
 
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        Intent intent = new Intent(AddToRankingActivity.this, EndedGameActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,7 +71,6 @@ public class AddToRankingActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.adam.project.best_score;
 
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,7 +16,6 @@ import java.util.List;
 
 public class BestScoreActivity extends ActionBarActivity {
     private List<BestScoreItem> ranking = new ArrayList<BestScoreItem>(6);
-    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,26 +70,17 @@ public class BestScoreActivity extends ActionBarActivity {
                 itemView = getLayoutInflater().inflate(R.layout.best_score_item, parent, false);
             }
 
-            String color;
-            if (counter%2 == 0)
-                color = "#59FFD6";
-            else
-                color = "#007BFF";
             BestScoreItem current = ranking.get(position);
 
             TextView playerName = (TextView)itemView.findViewById(R.id.best_score_playerName);
-            playerName.setText(current.getName());
-            playerName.setBackgroundColor(Color.parseColor(color));
+            playerName.setText((position + 1)+".  "+ current.getName().toUpperCase());
 
             TextView playerScore = (TextView)itemView.findViewById(R.id.best_score_playerScore);
             playerScore.setText(current.getResult()+"pkt");
-            playerScore.setBackgroundColor(Color.parseColor(color));
 
             TextView playerTime = (TextView)itemView.findViewById(R.id.best_score_playerTime);
             playerTime.setText(current.getTime());
-            playerTime.setBackgroundColor(Color.parseColor(color));
 
-            counter++;
             return itemView;
         }
     }
