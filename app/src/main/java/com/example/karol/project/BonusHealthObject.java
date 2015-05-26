@@ -8,14 +8,14 @@ import java.util.Random;
 /**
  * Created by kplos on 19.05.2015.
  */
-public class BonusObject extends GameObject {
+public class BonusHealthObject extends GameObject {
     private int speed,
             scoreValue = 2;
     private Random random = new Random();
     private Bitmap bitmap;
     private Boolean jumped = false;
 
-    public BonusObject(Bitmap bitmap, int x, int y) {
+    public BonusHealthObject(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
         super.x = x;
         super.y = y;

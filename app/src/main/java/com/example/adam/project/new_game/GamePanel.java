@@ -14,7 +14,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import com.example.adam.project.R;
-import com.example.karol.project.BonusObject;
+import com.example.karol.project.BirdObject;
+import com.example.karol.project.BonusHealthObject;
 import com.example.adam.project.best_score.Standings;
 import com.example.karol.project.BonusPointsObject;
 import com.example.karol.project.EnemyObject;
@@ -35,7 +36,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Background background;
     private Bitmap ground,
-                   penguinFrames[];
+                   penguinFrames[],
+                    birdFrames[];
     private PlayerObject player;
     private ArrayList<GameObject> gameObjects;
     private long enemySpaceTime,
@@ -102,17 +104,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
             int rand = random.nextInt(3000);
             if(rand < 10) {
-                gameObjects.add(new BonusObject(
+                gameObjects.add(new BonusHealthObject(
                         BitmapFactory.decodeResource(getResources(), R.drawable.bonus),
                         WIDTH + 10,
                         (int) (HEIGHT * 0.8)));
             }
-            int rand2 = random.nextInt(3000);
+            rand = random.nextInt(3000);
             if(rand < 30) {
                 gameObjects.add(new BonusPointsObject(
                         BitmapFactory.decodeResource(getResources(), R.drawable.diamond),
                         WIDTH + 10,
                         (int) (HEIGHT - 320)));
+            }
+            rand = random.nextInt(3000);
+            if(rand < 40) {
+                gameObjects.add(new BirdObject(birdFrames, 0, 50, 0, 0));
             }
 
             /*************************************************************************************/
@@ -126,8 +132,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 if (obj.getX() < -20)
                     objectsToDelete.add(obj);
 
+                if(obj instanceof BirdObject) {
+                    if(obj.getX() > WIDTH + 20)
+                        objectsToDelete.add(obj);
+                }
                 //Adding bonus amount of hp to player
-                if(obj instanceof BonusObject) {
+                else if(obj instanceof BonusHealthObject) {
                     if(isCollision(obj, player)) {
                         gameObjects.remove(obj);
                         player.addHp(random.nextInt(20) + 10);
@@ -221,6 +231,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //Initialize all necessary Game Objects and Attributes
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background2));
         Bitmap playerFrames[] = new Bitmap[5];
+        birdFrames = new Bitmap[14];
         penguinFrames = new Bitmap[4];
 
         playerFrames[0] = BitmapFactory.decodeResource(getResources(), R.drawable.hero_1_frame);
@@ -233,6 +244,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         penguinFrames[1] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin2);
         penguinFrames[2] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin3);
         penguinFrames[3] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin4);
+
+        birdFrames[0] = BitmapFactory.decodeResource(getResources(), R.drawable.bird1);
+        birdFrames[1] = BitmapFactory.decodeResource(getResources(), R.drawable.bird2);
+        birdFrames[2] = BitmapFactory.decodeResource(getResources(), R.drawable.bird3);
+        birdFrames[3] = BitmapFactory.decodeResource(getResources(), R.drawable.bird4);
+        birdFrames[4] = BitmapFactory.decodeResource(getResources(), R.drawable.bird5);
+        birdFrames[5] = BitmapFactory.decodeResource(getResources(), R.drawable.bird6);
+        birdFrames[6] = BitmapFactory.decodeResource(getResources(), R.drawable.bird7);
+        birdFrames[7] = BitmapFactory.decodeResource(getResources(), R.drawable.bird8);
+        birdFrames[8] = BitmapFactory.decodeResource(getResources(), R.drawable.bird9);
+        birdFrames[9] = BitmapFactory.decodeResource(getResources(), R.drawable.bird10);
+        birdFrames[10] = BitmapFactory.decodeResource(getResources(), R.drawable.bird11);
+        birdFrames[11] = BitmapFactory.decodeResource(getResources(), R.drawable.bird12);
+        birdFrames[12] = BitmapFactory.decodeResource(getResources(), R.drawable.bird13);
+        birdFrames[13] = BitmapFactory.decodeResource(getResources(), R.drawable.bird14);
 
         player = new PlayerObject(playerFrames, 80, 160);
         gameObjects = new ArrayList<GameObject>();

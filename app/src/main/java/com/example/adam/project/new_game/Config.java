@@ -17,6 +17,7 @@ public class Config {
     private static final int bonusPoints = 5;
     private static final int enemySpeed = 20;
     private static final int bonusSpeed = 15;
+    private static final int birdSpeed = 10;
     private static final int enemySpaceTime = 800;
     private static final int backgroundMoveSpeed = -5;
 
@@ -58,5 +59,9 @@ public class Config {
         if (instance == null)
             instance = new Config();
         return instance;
+    }
+
+    public static int getBirdSpeed() {
+        return birdSpeed;
     }
 }
