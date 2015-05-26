@@ -8,16 +8,23 @@ package com.example.adam.project.new_game;
 public class Config {
     private static Config instance = null;
     private static final int playerStartHp = 100;
-    private static final int jumpHeight = 200;
+    private static final int playerSpeed = -40;
+    private static final double playerFactorModifier = 0.1;
     private static final int enemyWidth = 80;
-    private static final int enemyHeight = 80;
+    private static final int enemyHeight = 120;
     private static final int bonusWidth = 40;
     private static final int bonusHeight = 40;
+    private static final int bonusPoints = 5;
     private static final int enemySpeed = 20;
     private static final int bonusSpeed = 15;
     private static final int enemySpaceTime = 800;
     private static final int backgroundMoveSpeed = -5;
 
+    public static int getBonusPoints() { return bonusPoints; }
+
+    public static int getPlayerSpeed() { return playerSpeed; }
+
+    public static double getPlayerFactorModifier() { return playerFactorModifier; }
 
     public static int getBackgroundMoveSpeed() { return backgroundMoveSpeed; }
 
@@ -29,10 +36,6 @@ public class Config {
 
     public static int getPlayerStartHp() {
         return playerStartHp;
-    }
-
-    public static int getJumpHeight() {
-        return jumpHeight;
     }
 
     public static int getEnemyWidth() {

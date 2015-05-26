@@ -3,6 +3,7 @@ package com.example.karol.project;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import com.example.adam.project.new_game.Animation;
 import com.example.adam.project.new_game.Config;
 import com.example.adam.project.new_game.GamePanel;
@@ -13,18 +14,20 @@ import com.example.adam.project.new_game.GamePanel;
 public class PlayerObject extends GameObject {
 
     private int score,
-            startY = (int)(GamePanel.HEIGHT*0.8),
-            jumpHeight = Config.getInstance().getJumpHeight(),
-            hp = Config.getInstance().getPlayerStartHp();
+            startY = (int)(GamePanel.HEIGHT - 150),
+            hp = Config.getInstance().getPlayerStartHp(),
+            speed = Config.getInstance().getPlayerSpeed();
     private Boolean up,
             playing = false,
             jumping = false;
     private Animation animation;
     private Paint paint = new Paint();
     private String time;
+    private double factor = 1.0,
+                   factorModifier = Config.getInstance().getPlayerFactorModifier();
 
     public PlayerObject(Bitmap frames[], int w, int h) {
-        x = GamePanel.WIDTH/2;
+        x = (int)(GamePanel.WIDTH * 0.4);
         y = startY;
         dy = 0;
         score = 0;
@@ -38,29 +41,40 @@ public class PlayerObject extends GameObject {
     @Override
     public void update() {
         animation.update();
-        if (up) {
-            if (y >= startY) { dy = -20;  jumping = true; }
+        if (up) {                               //Start jumping
+            if (y >= startY) {
+                dy = speed;
+                jumping = true;
+            }
             up = false;
         }
         else {
-            if (jumping) {
-                if (y >= startY) { dy = 0;  jumping = false; }
-                else if (y < startY - jumpHeight) dy = 20;
+            if (jumping) {                       //While jumping
+                if (y >= startY - 20) {          //Player fell to ground
+                    dy = 0;
+                    y = startY;
+                    jumping = false;
+                    factor = 1;
+                }
+                else {   dy = (int)(speed*factor);     factor -= factorModifier;   }
             }
-            else dy = 0;
         }
-        y += dy;
+        if (dy != 0)
+            y += dy;
     }
 
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(animation.getImage(), x - 100, y - 60, null);
+        canvas.drawBitmap(animation.getImage(), x - 30, y - 60, null);
         canvas.drawText("Score: "+score, 40, (int)(GamePanel.HEIGHT * 0.1), paint);
         canvas.drawText("HP: "+hp, 40, (int)(GamePanel.HEIGHT * 0.18), paint);
         time = getTimeInMinutes(GamePanel.duringGameInSeconds);
         canvas.drawText("Game Time: "+time, 40, (int)(GamePanel.HEIGHT * 0.26), paint);
     }
+
+    @Override
+    public Rect getRect() { return new Rect(x, y - 40, x + width, y + height - 40); }
 
     public String getTimeInMinutes(int seconds) {
         String result = "";

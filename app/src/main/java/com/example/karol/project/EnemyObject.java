@@ -2,9 +2,9 @@ package com.example.karol.project;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import com.example.adam.project.new_game.Animation;
 import com.example.adam.project.new_game.GamePanel;
-
 import java.util.Random;
 
 /**
@@ -40,6 +40,9 @@ public class EnemyObject extends GameObject {
         }
         catch (Exception e) {}
     }
+
+    @Override
+    public Rect getRect() { return new Rect(x - 70, y - 40, x + width - 70, y + height - 40); }
 
     @Override
     public int getWidth() { return width - 10; }

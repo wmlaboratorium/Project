@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import com.example.adam.project.R;
 import com.example.karol.project.BonusObject;
 import com.example.adam.project.best_score.Standings;
+import com.example.karol.project.BonusPointsObject;
 import com.example.karol.project.EnemyObject;
 import com.example.karol.project.GameObject;
 import com.example.karol.project.PlayerObject;
@@ -106,6 +107,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         WIDTH + 10,
                         (int) (HEIGHT * 0.8)));
             }
+            int rand2 = random.nextInt(3000);
+            if(rand < 30) {
+                gameObjects.add(new BonusPointsObject(
+                        BitmapFactory.decodeResource(getResources(), R.drawable.diamond),
+                        WIDTH + 10,
+                        (int) (HEIGHT - 320)));
+            }
 
             /*************************************************************************************/
 
@@ -124,13 +132,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         gameObjects.remove(obj);
                         player.addHp(random.nextInt(20) + 10);
                         break;
-                    } else if (obj.getX() < (WIDTH / 2 - 50) && !((BonusObject) obj).getJumped()) {
-                        ((BonusObject) obj).setJumped(true);
+                    }
+                }
+                else if (obj instanceof BonusPointsObject) {
+                    if(isCollision(obj, player)) {
+                        gameObjects.remove(obj);
+                        player.addToScore(Config.getInstance().getBonusPoints());
+                        break;
                     }
                 }
 
                 //Checking collisions between player and enemies
-                if (obj instanceof EnemyObject) {
+                else if (obj instanceof EnemyObject) {
                     if (isCollision(obj, player)) {
                         gameObjects.remove(obj);
                         player.loseHp(20);
@@ -221,7 +234,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         penguinFrames[2] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin3);
         penguinFrames[3] = BitmapFactory.decodeResource(getResources(), R.drawable.penguin4);
 
-        player = new PlayerObject(playerFrames, 60, 100);
+        player = new PlayerObject(playerFrames, 80, 160);
         gameObjects = new ArrayList<GameObject>();
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
 
