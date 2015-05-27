@@ -44,9 +44,6 @@ public class EnemyObject extends GameObject {
     @Override
     public Rect getRect() { return new Rect(x - 70, y - 40, x + width - 70, y + height - 40); }
 
-    @Override
-    public int getWidth() { return width - 10; }
-
     public void setJumped(boolean flag) { jumped = flag; }
 
     public Boolean getJumped() { return jumped; }

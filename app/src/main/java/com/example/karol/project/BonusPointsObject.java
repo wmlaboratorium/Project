@@ -11,11 +11,9 @@ import java.util.Random;
  * Created by Adam on 5/26/2015.
  */
 public class BonusPointsObject extends GameObject {
-    private int speed,
-            scoreValue = 2;
+    private int speed;
     private Random random = new Random();
     private Bitmap bitmap;
-    private Boolean jumped = false;
 
     public BonusPointsObject(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
@@ -36,8 +34,4 @@ public class BonusPointsObject extends GameObject {
         }
         catch (Exception e) {}
     }
-
-    @Override
-    public int getWidth() { return width - 10; }
-
 }

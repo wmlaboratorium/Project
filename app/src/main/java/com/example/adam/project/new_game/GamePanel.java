@@ -118,7 +118,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
             rand = random.nextInt(3000);
             if(rand < 40) {
-                gameObjects.add(new BirdObject(birdFrames, 0, 50, 0, 0));
+                int y = random.nextInt((int)(HEIGHT*0.3)) + 50;
+                gameObjects.add(new BirdObject(birdFrames, 0, y, 0, 0));
             }
 
             /*************************************************************************************/
@@ -129,15 +130,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             for (GameObject obj : gameObjects) {
                 obj.update();
-                if (obj.getX() < -20)
+                if (obj.getX() < -20 || obj.getX() > WIDTH*1.5)
                     objectsToDelete.add(obj);
 
-                if(obj instanceof BirdObject) {
-                    if(obj.getX() > WIDTH + 20)
-                        objectsToDelete.add(obj);
-                }
                 //Adding bonus amount of hp to player
-                else if(obj instanceof BonusHealthObject) {
+                if(obj instanceof BonusHealthObject) {
                     if(isCollision(obj, player)) {
                         gameObjects.remove(obj);
                         player.addHp(random.nextInt(20) + 10);

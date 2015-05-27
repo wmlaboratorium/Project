@@ -2,11 +2,9 @@ package com.example.karol.project;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
 import com.example.adam.project.new_game.Animation;
 import com.example.adam.project.new_game.Config;
 import com.example.adam.project.new_game.GamePanel;
-
 import java.util.Random;
 
 /**
@@ -15,11 +13,8 @@ import java.util.Random;
 public class BirdObject extends GameObject {
     private Animation animation;
 
-    private int speed,
-            scoreValue = 2;
+    private int speed;
     private Random random = new Random();
-    private Bitmap bitmap;
-    private Boolean jumped = false;
 
     public BirdObject(Bitmap frames[], int x, int y, int w, int h) {
         super.x = x;
@@ -28,7 +23,7 @@ public class BirdObject extends GameObject {
         height = h;
         animation = new Animation(frames, 100);
         animation.setFrame(random.nextInt(100000) % 14);
-        speed = GamePanel.actualEnemySpeed + random.nextInt((int)(GamePanel.actualEnemySpeed*0.1)) - 4;
+        speed = Config.getInstance().getBirdSpeed();
     }
 
     public void update() {
@@ -43,7 +38,4 @@ public class BirdObject extends GameObject {
         }
         catch (Exception e) {}
     }
-
-    @Override
-    public int getWidth() { return width - 10; }
 }

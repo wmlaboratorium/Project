@@ -9,11 +9,9 @@ import java.util.Random;
  * Created by kplos on 19.05.2015.
  */
 public class BonusHealthObject extends GameObject {
-    private int speed,
-            scoreValue = 2;
+    private int speed;
     private Random random = new Random();
     private Bitmap bitmap;
-    private Boolean jumped = false;
 
     public BonusHealthObject(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
@@ -33,13 +31,4 @@ public class BonusHealthObject extends GameObject {
         }
         catch (Exception e) {}
     }
-
-    @Override
-    public int getWidth() { return width - 10; }
-
-    public void setJumped(boolean flag) { jumped = flag; }
-
-    public Boolean getJumped() { return jumped; }
-
-    public int getScoreValue() { return scoreValue; }
 }
